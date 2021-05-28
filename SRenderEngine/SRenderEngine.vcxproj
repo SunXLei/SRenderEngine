@@ -158,6 +158,8 @@
   <ItemGroup>
     <None Include="res\shader\blinnphong.frag" />
     <None Include="res\shader\blinnphong.vert" />
+    <None Include="res\shader\shadowmap_generation.frag" />
+    <None Include="res\shader\shadowmap_generation.vert" />
     <None Include="res\shader\test.frag" />
     <None Include="res\shader\test.vert" />
   </ItemGroup>

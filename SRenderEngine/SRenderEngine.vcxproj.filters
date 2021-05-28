@@ -33,6 +33,8 @@
     <None Include="res\shader\blinnphong.frag" />
     <None Include="res\shader\test.vert" />
     <None Include="res\shader\test.frag" />
+    <None Include="res\shader\shadowmap_generation.vert" />
+    <None Include="res\shader\shadowmap_generation.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\shader.h">

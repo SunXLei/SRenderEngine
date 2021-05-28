@@ -8,7 +8,7 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath)
 {
 	std::string vertexCode;
 	std::string fragmentCode;
-	std::ifstream vertexFile;
+	std::ifstream vertexFile; 
 	std::ifstream fragmentFile;
 
 	// ensure ifstream can throw exceptions when exact bit is set

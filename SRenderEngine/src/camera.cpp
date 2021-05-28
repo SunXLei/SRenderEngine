@@ -81,7 +81,7 @@ void Camera::UpdateCameraVectors()
 	m_Front = glm::normalize(front);
 
 	// be careful that m_Front is negative z-axis
-	m_Right = glm::cross(m_Front, m_WorldUp);
-	m_Up = glm::cross(m_Right, m_Front);
+	m_Right = glm::normalize(glm::cross(m_Front, m_WorldUp));
+	m_Up = glm::normalize(glm::cross(m_Right, m_Front));
 }
 
