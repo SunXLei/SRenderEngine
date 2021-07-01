@@ -9,10 +9,11 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "stb_image.h"
+#include "./platform/window/WindowManager.h"
 
 // settings
-const unsigned int SRC_WIDTH = 1280;
-const unsigned int SRC_HEIGHT = 720;
+const unsigned int SRC_WIDTH = 800;
+const unsigned int SRC_HEIGHT = 600;
 
 // callback funciton
 void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
@@ -38,43 +39,53 @@ float lastFrame = 0.0f;
 // meshes
 unsigned int planeVAO, planeVBO;
 
+using namespace sre;
 
 int main()
 {
+	if (!WindowManager::Instance()->Init("SRenderEngine", 800, 600))
+	{
+		std::cout<< "Could not initialize window class!\n";
+		glfwTerminate();
+	}
+
+
 	// glfw: initialize and configure
 	// ------------------------------
-	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	//glfwInit();
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 
 
-	// glfw window creation
-	// --------------------
-	GLFWwindow *window = glfwCreateWindow(SRC_WIDTH, SRC_HEIGHT, "SRenderEngine", NULL, NULL);
-	if (window == NULL)
-	{
-		std::cout << "Failed to create GLFW window" << std::endl;
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
-	glfwSetCursorPosCallback(window, MouseCallback);
-	glfwSetScrollCallback(window, ScrollCallback);
-	glfwSetMouseButtonCallback(window, MouseButtonCallback);
+	//// glfw window creation
+	//// --------------------
+	//GLFWwindow *window = glfwCreateWindow(SRC_WIDTH, SRC_HEIGHT, "SRenderEngine", NULL, NULL);
+	//if (window == NULL)
+	//{
+	//	std::cout << "Failed to create GLFW window" << std::endl;
+	//	glfwTerminate();
+	//	return -1;
+	//}
 
-	//// tell GLFW to capture our mouse
-	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//// make context and set callback function
+	//glfwMakeContextCurrent(window);
+	//glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
+	//glfwSetCursorPosCallback(window, MouseCallback);
+	//glfwSetScrollCallback(window, ScrollCallback);
+	//glfwSetMouseButtonCallback(window, MouseButtonCallback);
 
-	// load all opengl function pointers with glad
-	// -------------------------------------------
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
-		return -1;
-	}
+	////// tell GLFW to capture our mouse
+	////glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	//// load all opengl function pointers with glad
+	//// -------------------------------------------
+	//if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	//{
+	//	std::cout << "Failed to initialize GLAD" << std::endl;
+	//	return -1;
+	//}
 
 	// configure global opengl state
 	// -----------------------------
@@ -156,7 +167,7 @@ int main()
 	// -------------
 	glm::vec3 lightPos(5.0f, 0.5f,5.0f);
 
-	while (!glfwWindowShouldClose(window))
+	while (!WindowManager::Instance()->IsTerminated())
 	{
 		// calculate per frame time
 		// ------------------------
@@ -166,7 +177,7 @@ int main()
 
 		// process input events
 		// --------------------
-		ProcessInput(window);
+		//ProcessInput(window);
 
 		// render
 		// ------
@@ -174,7 +185,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// 1. render depth of scene to texture (from light's perspective)
-// --------------------------------------------------------------
+		// --------------------------------------------------------------
 		glm::mat4 lightProjection, lightView;
 		glm::mat4 lightSpaceMatrix;
 		float near_plane = 0.0f, far_plane = 25.5f;
@@ -220,8 +231,7 @@ int main()
 
 		// swap buffers and poll IO events
 		// -------------------------------
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		WindowManager::Instance()->Update();
 	}
 
 	glfwTerminate();

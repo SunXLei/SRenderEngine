@@ -27,6 +27,12 @@
     <ClCompile Include="src\camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\window\WindowManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\window\InputManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\blinnphong.vert" />
@@ -41,6 +47,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\window\WindowManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\window\InputManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\macros.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
