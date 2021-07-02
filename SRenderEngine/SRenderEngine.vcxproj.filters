@@ -24,13 +24,16 @@
     <ClCompile Include="src\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\camera.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\platform\window\WindowManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\window\InputManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Scene.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -46,9 +49,6 @@
     <ClInclude Include="src\shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\camera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\platform\window\WindowManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -56,6 +56,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\macros.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Scene.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

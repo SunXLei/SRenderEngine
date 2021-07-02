@@ -40,6 +40,10 @@ namespace sre
 			GLenum cursorOption = wm->mHideCursor ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL;
 			glfwSetInputMode(wm->mWindow, GLFW_CURSOR, cursorOption);
 		}
+
+
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+			glfwSetWindowShouldClose(window, true);
 	}
 
 	void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
@@ -94,9 +98,9 @@ namespace sre
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_FALSE);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		// create the window and OpenGL context
+		// create the window
 		if (FULLSCREEN_MODE) 
 		{
 			//setFullscreenResolution();
@@ -121,7 +125,7 @@ namespace sre
 		glfwGetCursorPos(mWindow, &currentMouseX, &currentMouseY);
 		InputManager::Instance()->SetMousePos(currentMouseX, currentMouseY);
 
-		// Set up contexts and callbacks
+		// set up contexts and callbacks
 		glfwMakeContextCurrent(mWindow);
 		glfwSetWindowUserPointer(mWindow, this);
 		glfwSetErrorCallback(ErrorCallback);
@@ -134,7 +138,6 @@ namespace sre
 
 		// v-sync settings
 		glfwSwapInterval(V_SYNC);
-		
 		
 		// load all opengl function pointers with glad
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))

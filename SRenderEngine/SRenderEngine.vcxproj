@@ -150,8 +150,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\graphics\Camera.cpp" />
+    <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\platform\window\InputManager.cpp" />
-    <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
@@ -166,9 +167,10 @@
     <None Include="res\shader\test.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\graphics\Camera.h" />
+    <ClInclude Include="src\graphics\Scene.h" />
     <ClInclude Include="src\macros.h" />
     <ClInclude Include="src\platform\window\InputManager.h" />
-    <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\platform\window\WindowManager.h" />
   </ItemGroup>

@@ -29,7 +29,6 @@ namespace sre
 
 
 		// callback functions, 友元是为让它们接受到GLFW的用户指针且转型之后可以访问私有变量
-		// static 是为了免去this指针作为函数的第一个参数
 		friend void ErrorCallback(int error, const char* description);
 		friend void WindowResizeCallback(GLFWwindow* window, int width, int height);
 		friend void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);

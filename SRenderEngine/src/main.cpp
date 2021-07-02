@@ -10,6 +10,7 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "stb_image.h"
 #include "./platform/window/WindowManager.h"
+#include "./graphics/Scene.h"
 
 // settings
 const unsigned int SRC_WIDTH = 800;
@@ -27,7 +28,7 @@ void renderScene(const Shader &shader);
 void renderCube();
 
 // camera
-Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
+//Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
 float lastX = (float)SRC_WIDTH / 2.0;
 float lastY = (float)SRC_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -49,47 +50,15 @@ int main()
 		glfwTerminate();
 	}
 
+	Scene scene;
 
-	// glfw: initialize and configure
-	// ------------------------------
-	//glfwInit();
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-	//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-
-
-	//// glfw window creation
-	//// --------------------
-	//GLFWwindow *window = glfwCreateWindow(SRC_WIDTH, SRC_HEIGHT, "SRenderEngine", NULL, NULL);
-	//if (window == NULL)
-	//{
-	//	std::cout << "Failed to create GLFW window" << std::endl;
-	//	glfwTerminate();
-	//	return -1;
-	//}
-
-	//// make context and set callback function
-	//glfwMakeContextCurrent(window);
-	//glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
-	//glfwSetCursorPosCallback(window, MouseCallback);
-	//glfwSetScrollCallback(window, ScrollCallback);
-	//glfwSetMouseButtonCallback(window, MouseButtonCallback);
-
-	////// tell GLFW to capture our mouse
-	////glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	//// load all opengl function pointers with glad
-	//// -------------------------------------------
-	//if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-	//{
-	//	std::cout << "Failed to initialize GLAD" << std::endl;
-	//	return -1;
-	//}
+	
 
 	// configure global opengl state
 	// -----------------------------
 	glEnable(GL_DEPTH_TEST);
+	glfwWindowHint(GLFW_SAMPLES, 16);
+	glEnable(GL_MULTISAMPLE);
 	// set depth function to less than AND equal for skybox depth trick.
 	glDepthFunc(GL_LEQUAL);
 	// enable seamless cubemap sampling for lower mip levels in the pre-filter map.
@@ -165,7 +134,7 @@ int main()
 
 	// lighting info
 	// -------------
-	glm::vec3 lightPos(5.0f, 0.5f,5.0f);
+	glm::vec3 lightPos(5.0f, 5.5f,5.0f);
 
 	while (!WindowManager::Instance()->IsTerminated())
 	{
@@ -177,7 +146,7 @@ int main()
 
 		// process input events
 		// --------------------
-		//ProcessInput(window);
+		scene.Update(deltaTime);
 
 		// render
 		// ------
@@ -211,15 +180,15 @@ int main()
 
 		// 2. render scene as normal using the generated depth/shadow map  
 		// --------------------------------------------------------------
-		glViewport(0, 0, SRC_WIDTH, SRC_HEIGHT);
+		glViewport(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		blinnShader.Bind();
-		glm::mat4 projection = glm::perspective(glm::radians(camera.GetCameraFov()), (float)SRC_WIDTH / (float)SRC_HEIGHT, 0.1f, 100.0f);
-		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 projection = scene.GetCamera()->GetProjectionMatrix();
+		glm::mat4 view = scene.GetCamera()->GetViewMatrix();
 		blinnShader.SetMat4("projection", projection);
 		blinnShader.SetMat4("view", view);
 		// set light uniforms
-		blinnShader.SetVec3("viewPos", camera.m_Position);
+		blinnShader.SetVec3("viewPos", scene.GetCamera()->GetPosition());
 		blinnShader.SetVec3("lightPos", lightPos);
 		blinnShader.SetMat4("lightSpaceMatrix", lightSpaceMatrix);
 		glActiveTexture(GL_TEXTURE0);
@@ -238,83 +207,6 @@ int main()
 	return 0;
 }
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
-void FramebufferSizeCallback(GLFWwindow *window, int width, int height)
-{
-	// make sure the viewport matches the new window dimensions; note that width and 
-	// height will be significantly larger than specified on retina displays.
-	glViewport(0, 0, width, height);
-}
-
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
-void MouseCallback(GLFWwindow* window, double xpos, double ypos)
-{
-	if (firstMouse)
-	{
-		lastX = (float)xpos;
-		lastY = (float)ypos;
-		firstMouse = false;
-	}
-	
-
-	float xoffset = (float)xpos - lastX;
-	float yoffset = lastY - (float)ypos; // reversed since y-coordinates go from bottom to top, 下面y大，上面y小
-
-	lastX = (float)xpos;
-	lastY = (float)ypos;
-
-	if(camera.m_CanRotate)
-		camera.ProcessMouseMovement(xoffset, yoffset);
-
-	//std::cout << "xoffset:" << xoffset << " yoffset:" << yoffset << "\n";
-	//std::cout<<"Yaw:" << camera.m_Yaw << " Pitch:" << camera.m_Pitch<< "\n";
-	//std::cout << camera.m_Front[0] << " " << camera.m_Front[1] << " " << camera.m_Front[2] << "\n";
-}
-
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ---------------------------------------------------------------------- 
-void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
-{
-	camera.ProcessMouseScroll((float)yoffset);
-}
-
-
-void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
-{
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-	{
-		//std::cout << "mouse button click" << "\n";
-		camera.m_CanRotate = true;
-	}
-
-	if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
-	{
-		//std::cout << "mouse button RELEASE" << "\n";
-		camera.m_CanRotate = false;
-	}
-}
-
-
-void ProcessInput(GLFWwindow *window)
-{
-	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, true);
-
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, deltaTime);
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		std::cout << camera.m_Right[0] << " " << camera.m_Right[1] << " " << camera.m_Right[2] << "\n";
-		camera.ProcessKeyboard(RIGHT, deltaTime);
-	}
-
-}
 
 unsigned int LoadTexture(const char *path)
 {
