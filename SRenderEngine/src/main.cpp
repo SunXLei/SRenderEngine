@@ -1,7 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <iostream>
 
-#include "camera.h"
 #include "shader.h"
 
 #include "glad/glad.h"
@@ -12,26 +11,10 @@
 #include "./platform/window/WindowManager.h"
 #include "./graphics/Scene.h"
 
-// settings
-const unsigned int SRC_WIDTH = 800;
-const unsigned int SRC_HEIGHT = 600;
-
-// callback funciton
-void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
-void MouseCallback(GLFWwindow *window, double xpos, double ypos);
-void ScrollCallback(GLFWwindow *window, double xpos, double ypos); 
-void MouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-
-void ProcessInput(GLFWwindow *window);
 unsigned int LoadTexture(const char *path);
 void renderScene(const Shader &shader);
 void renderCube();
 
-// camera
-//Camera camera(glm::vec3(0.0f, 5.0f, 3.0f));
-float lastX = (float)SRC_WIDTH / 2.0;
-float lastY = (float)SRC_HEIGHT / 2.0;
-bool firstMouse = true;
 
 // timing
 float deltaTime = 0.0f;
@@ -174,7 +157,7 @@ int main()
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		// reset viewport
-		glViewport(0, 0, SRC_WIDTH, SRC_HEIGHT);
+		glViewport(0, 0, 800, 600);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
