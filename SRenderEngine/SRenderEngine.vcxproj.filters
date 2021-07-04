@@ -21,9 +21,6 @@
     <ClCompile Include="vendor\glad\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\shader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\platform\window\WindowManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -51,6 +48,15 @@
     <ClCompile Include="src\graphics\model\Mesh.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\model\Material.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\texture\TextureLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\blinnphong.vert" />
@@ -61,9 +67,6 @@
     <None Include="res\shader\shadowmap_generation.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\shader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="src\platform\window\WindowManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -92,6 +95,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\model\Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\model\Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\texture\TextureLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

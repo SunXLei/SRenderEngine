@@ -5,6 +5,9 @@
 #define FULLSCREEN_MODE 0 // If set, window resolution is maximized to your screen resolution
 
 
+// AA Settings
+#define MSAA_SAMPLE_AMOUNT 4 // Only used in forward rendering & for water
+
 // Camera Settings
 #define CAMERA_SPEED 15.0f
 #define CAMERA_ROTATION_SENSITIVITY 0.15f

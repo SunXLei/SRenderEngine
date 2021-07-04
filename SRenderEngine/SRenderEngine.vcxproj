@@ -22,32 +22,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{4D8D4399-59D5-4AEA-B104-9D5866835D24}</ProjectGuid>
     <RootNamespace>SRenderEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -87,79 +87,81 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src;$(ProjectDir)vendor\assimp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;$(ProjectDir)vendor\assimp\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src;$(ProjectDir)vendor\assimp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;$(ProjectDir)vendor\assimp\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src;$(ProjectDir)vendor\assimp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;$(ProjectDir)vendor\assimp\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level2</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)vendor\glfw\include;$(ProjectDir)vendor\glad\include;$(ProjectDir)vendor\glm;$(ProjectDir)vendor\stb_image;$(ProjectDir)\src;$(ProjectDir)vendor\assimp\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)vendor\glfw;$(ProjectDir)vendor\assimp\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>assimp.lib;glfw3.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\Camera.cpp" />
+    <ClCompile Include="src\graphics\model\Material.cpp" />
     <ClCompile Include="src\graphics\model\Mesh.cpp" />
     <ClCompile Include="src\graphics\model\Model.cpp" />
     <ClCompile Include="src\graphics\renderer\ModelRenderer.cpp" />
     <ClCompile Include="src\graphics\renderer\RenderPassManager.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
+    <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\texture\Texture.cpp" />
+    <ClCompile Include="src\graphics\texture\TextureLoader.cpp" />
     <ClCompile Include="src\platform\window\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
     <ClCompile Include="src\platform\window\WindowManager.cpp" />
   </ItemGroup>
@@ -173,15 +175,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Camera.h" />
+    <ClInclude Include="src\graphics\model\Material.h" />
     <ClInclude Include="src\graphics\model\Mesh.h" />
     <ClInclude Include="src\graphics\model\Model.h" />
     <ClInclude Include="src\graphics\renderer\ModelRenderer.h" />
     <ClInclude Include="src\graphics\renderer\RenderPassManager.h" />
     <ClInclude Include="src\graphics\Scene.h" />
+    <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\graphics\texture\Texture.h" />
+    <ClInclude Include="src\graphics\texture\TextureLoader.h" />
     <ClInclude Include="src\macros.h" />
     <ClInclude Include="src\platform\window\InputManager.h" />
-    <ClInclude Include="src\shader.h" />
     <ClInclude Include="src\platform\window\WindowManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,7 +1,8 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include <iostream>
 
-#include "shader.h"
+#include <iostream>
+#include <unordered_map>
+
+#include "./graphics/Shader.h"
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -10,11 +11,11 @@
 #include "stb_image.h"
 #include "./platform/window/WindowManager.h"
 #include "./graphics/Scene.h"
+#include "./graphics/model/Model.h"
 
 unsigned int LoadTexture(const char *path);
-void renderScene(const Shader &shader);
+void renderScene( Shader &shader);
 void renderCube();
-
 
 // timing
 float deltaTime = 0.0f;
@@ -35,6 +36,7 @@ int main()
 
 	Scene scene;
 
+	//Model model("./res/Sponza/sponza.obj");
 	
 
 	// configure global opengl state
@@ -49,8 +51,15 @@ int main()
 
 	// compile shader
 	// --------------
-	Shader shadowmapShader("res/shader/shadowmap_generation.vert", "res/shader/shadowmap_generation.frag");
-	Shader blinnShader("res/shader/blinnphong.vert", "res/shader/blinnphong.frag");
+	std::unordered_map<std::string, std::string> smShaderPaths;
+	smShaderPaths.insert({ "vertex","res/shader/shadowmap_generation.vert" });
+	smShaderPaths.insert({ "fragment","res/shader/shadowmap_generation.frag" });
+	Shader shadowmapShader(smShaderPaths);
+
+	std::unordered_map<std::string, std::string> blinnShaderPaths;
+	blinnShaderPaths.insert({ "vertex","res/shader/blinnphong.vert" });
+	blinnShaderPaths.insert({ "fragment","res/shader/blinnphong.frag" });
+	Shader blinnShader(blinnShaderPaths);
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -112,8 +121,8 @@ int main()
 	// shader configuration
 	// --------------------
 	blinnShader.Bind();
-	blinnShader.SetInt("floorTexture", 0);
-	blinnShader.SetInt("shadowMap", 1);
+	blinnShader.SetUniform("floorTexture", 0);
+	blinnShader.SetUniform("shadowMap", 1);
 
 	// lighting info
 	// -------------
@@ -146,7 +155,7 @@ int main()
 		lightSpaceMatrix = lightProjection * lightView;
 		// render scene from light's point of view
 		shadowmapShader.Bind();
-		shadowmapShader.SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+		shadowmapShader.SetUniform("lightSpaceMatrix", lightSpaceMatrix);
 
 		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 		glBindFramebuffer(GL_FRAMEBUFFER, shadowmapFBO);
@@ -168,12 +177,12 @@ int main()
 		blinnShader.Bind();
 		glm::mat4 projection = scene.GetCamera()->GetProjectionMatrix();
 		glm::mat4 view = scene.GetCamera()->GetViewMatrix();
-		blinnShader.SetMat4("projection", projection);
-		blinnShader.SetMat4("view", view);
+		blinnShader.SetUniform("projection", projection);
+		blinnShader.SetUniform("view", view);
 		// set light uniforms
-		blinnShader.SetVec3("viewPos", scene.GetCamera()->GetPosition());
-		blinnShader.SetVec3("lightPos", lightPos);
-		blinnShader.SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+		blinnShader.SetUniform("viewPos", scene.GetCamera()->GetPosition());
+		blinnShader.SetUniform("lightPos", lightPos);
+		blinnShader.SetUniform("lightSpaceMatrix", lightSpaceMatrix);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, floorTexture);
 		glActiveTexture(GL_TEXTURE1);
@@ -239,29 +248,29 @@ unsigned int LoadTexture(const char *path)
 
 // renders the 3D scene
 // --------------------
-void renderScene(const Shader &shader)
+void renderScene(Shader &shader)
 {
 	// floor
 	glm::mat4 model = glm::mat4(1.0f);
-	shader.SetMat4("model", model);
+	shader.SetUniform("model", model);
 	glBindVertexArray(planeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	// cubes
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
 	model = glm::scale(model, glm::vec3(0.5f));
-	shader.SetMat4("model", model);
+	shader.SetUniform("model", model);
 	renderCube();
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(4.0f, 0.0f, 1.0));
 	model = glm::scale(model, glm::vec3(0.5f));
-	shader.SetMat4("model", model);
+	shader.SetUniform("model", model);
 	renderCube();
 	model = glm::mat4(1.0f);
 	model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 2.0));
 	model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
 	model = glm::scale(model, glm::vec3(0.5f));
-	shader.SetMat4("model", model);
+	shader.SetUniform("model", model);
 	renderCube();
 }
 
