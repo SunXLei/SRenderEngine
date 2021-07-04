@@ -151,15 +151,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\Camera.cpp" />
+    <ClCompile Include="src\graphics\model\shapes\Cube.cpp" />
     <ClCompile Include="src\graphics\model\Material.cpp" />
     <ClCompile Include="src\graphics\model\Mesh.cpp" />
     <ClCompile Include="src\graphics\model\Model.cpp" />
+    <ClCompile Include="src\graphics\model\shapes\Sphere.cpp" />
     <ClCompile Include="src\graphics\renderer\ModelRenderer.cpp" />
+    <ClCompile Include="src\graphics\renderer\RenderPass.cpp" />
     <ClCompile Include="src\graphics\renderer\RenderPassManager.cpp" />
+    <ClCompile Include="src\graphics\renderer\ShadowmapPass.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\texture\Texture.cpp" />
     <ClCompile Include="src\graphics\texture\TextureLoader.cpp" />
+    <ClCompile Include="src\platform\opengl\GLHelper.cpp" />
     <ClCompile Include="src\platform\window\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
@@ -175,16 +180,21 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Camera.h" />
+    <ClInclude Include="src\graphics\model\shapes\Cube.h" />
     <ClInclude Include="src\graphics\model\Material.h" />
     <ClInclude Include="src\graphics\model\Mesh.h" />
     <ClInclude Include="src\graphics\model\Model.h" />
+    <ClInclude Include="src\graphics\model\shapes\Sphere.h" />
     <ClInclude Include="src\graphics\renderer\ModelRenderer.h" />
+    <ClInclude Include="src\graphics\renderer\RenderPass.h" />
     <ClInclude Include="src\graphics\renderer\RenderPassManager.h" />
+    <ClInclude Include="src\graphics\renderer\ShadowmapPass.h" />
     <ClInclude Include="src\graphics\Scene.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\graphics\texture\Texture.h" />
     <ClInclude Include="src\graphics\texture\TextureLoader.h" />
     <ClInclude Include="src\macros.h" />
+    <ClInclude Include="src\platform\opengl\GLHelper.h" />
     <ClInclude Include="src\platform\window\InputManager.h" />
     <ClInclude Include="src\platform\window\WindowManager.h" />
   </ItemGroup>
