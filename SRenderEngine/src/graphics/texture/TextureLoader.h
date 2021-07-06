@@ -11,7 +11,7 @@ namespace sre
 	{
 	public:
 		// TODO: HDR loading
-		static Texture* load2DTexture(std::string &path, TextureSettings *settings = nullptr);
+		static Texture* Load2DTexture(const std::string &path, TextureSettings *settings = nullptr);
 		//static Cubemap* loadCubemapTexture(const std::string &right, const std::string &left, const std::string &top, const std::string &bottom, const std::string &back, const std::string &front, CubemapSettings *settings = nullptr);
 
 

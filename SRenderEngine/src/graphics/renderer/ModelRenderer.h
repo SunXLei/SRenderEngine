@@ -23,9 +23,8 @@ namespace sre
 		void SetupModelMatrix(Model *model, Shader *shader, bool isUseMaterial);
 
 	private:
-		Camera *mCamera;
+		Camera *mCamera; // may for transparent object sort
 
-		std::deque<Model*> mRenderQueue;
-
+		std::deque<Model*> mRenderQueue;  // model memory is managed outside
 	};
 }

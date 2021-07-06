@@ -1,7 +1,9 @@
 #Directories
 .vs/
-bin/
-bin-ind/
+bin/*
+bin-ind/*
 
 #Files
 *.user
+
+ !/SRenderEngine/vendor/assimp/bin/

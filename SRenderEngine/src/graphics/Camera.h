@@ -20,6 +20,9 @@ namespace sre
 
 		// inline utility functions
 		inline void SetPosition(const glm::vec3& pos) { mPos = pos; };
+		inline void SetYaw(const float& yaw) { mYaw = yaw; };
+		inline void SetPitch(const float& pitch) { mPitch = pitch; };
+
 		inline float GetYaw() const { return mYaw; }
 		inline float GetPitch() const { return mPitch; }
 		inline float GetFOV() const { return mFOV; }
@@ -27,7 +30,7 @@ namespace sre
 		inline const glm::vec3& GetFront() const { return mFront; }
 		inline const glm::vec3& GetUp() const { return mUp; }
 
-	private:
+	public:
 		void UpdateCameraVectors();
 
 	private:

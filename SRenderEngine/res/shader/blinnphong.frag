@@ -1,4 +1,14 @@
-#version 400 core
+#version 430 core
+
+struct Material 
+{
+	sampler2D texture_albedo;
+	sampler2D texture_normal;
+	sampler2D texture_metallic;
+	sampler2D texture_roughness;
+	sampler2D texture_ao;
+};
+
 out vec4 FragColor;
 
 in vec3 fragPos;
@@ -8,6 +18,7 @@ in vec2 texCoords;
 
 uniform vec3 lightPos;
 uniform vec3 viewPos;
+uniform Material material;
 uniform sampler2D floorTexture;
 uniform sampler2D shadowMap;
 
@@ -41,7 +52,7 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 
 void main()
 {
-	vec3 color = texture(floorTexture, texCoords).rgb;
+	vec3 color = texture(material.texture_albedo, texCoords).rgb;
 	vec3 ambient, diffuse, specular;
 
 	// ambient
@@ -60,5 +71,5 @@ void main()
 	
     // calculate shadow
     float shadow = ShadowCalculation(FragPosLightSpace, normal, lightDir);   
-	FragColor = vec4(ambient + (1-shadow) * (diffuse + specular ), 1.0f);
+	FragColor = vec4(color, 1.0f);
 }

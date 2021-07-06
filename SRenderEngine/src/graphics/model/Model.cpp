@@ -27,6 +27,10 @@ namespace sre
 
 	}
 
+	void Model::Init()
+	{
+	}
+
 	void Model::Draw(Shader * shader, bool isUseMaterial) const
 	{
 		for (unsigned int i = 0; i < mMeshes.size(); ++i) 
@@ -169,7 +173,7 @@ namespace sre
 			for (auto &c : fileToSearch)
 				if (c == '\\') c = '/';
 			std::cout << fileToSearch << "\n";
-			return TextureLoader::load2DTexture(fileToSearch, &textureSettings);
+			return TextureLoader::Load2DTexture(fileToSearch, &textureSettings);
 		}
 
 		return nullptr;

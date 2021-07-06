@@ -10,8 +10,10 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "stb_image.h"
 #include "./platform/window/WindowManager.h"
+#include "./platform/window/InputManager.h"
 #include "./graphics/Scene.h"
 #include "./graphics/model/Model.h"
+#include "./graphics/renderer/RenderPassManager.h"
 
 unsigned int LoadTexture(const char *path);
 void renderScene( Shader &shader);
@@ -26,107 +28,24 @@ unsigned int planeVAO, planeVBO;
 
 using namespace sre;
 
+
+
 int main()
 {
+	// Init
+	InputManager::Instance();
 	if (!WindowManager::Instance()->Init("SRenderEngine", 800, 600))
 	{
-		std::cout<< "Could not initialize window class!\n";
+		std::cout << "Could not initialize window class!\n";
 		glfwTerminate();
 	}
 
-	Scene scene;
-
-	//Model model("./res/Sponza/sponza.obj");
-	
-
-	// configure global opengl state
-	// -----------------------------
-	glEnable(GL_DEPTH_TEST);
-	glfwWindowHint(GLFW_SAMPLES, 16);
-	glEnable(GL_MULTISAMPLE);
-	// set depth function to less than AND equal for skybox depth trick.
-	glDepthFunc(GL_LEQUAL);
-	// enable seamless cubemap sampling for lower mip levels in the pre-filter map.
-	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
-
-	// compile shader
-	// --------------
-	std::unordered_map<std::string, std::string> smShaderPaths;
-	smShaderPaths.insert({ "vertex","res/shader/shadowmap_generation.vert" });
-	smShaderPaths.insert({ "fragment","res/shader/shadowmap_generation.frag" });
-	Shader shadowmapShader(smShaderPaths);
-
-	std::unordered_map<std::string, std::string> blinnShaderPaths;
-	blinnShaderPaths.insert({ "vertex","res/shader/blinnphong.vert" });
-	blinnShaderPaths.insert({ "fragment","res/shader/blinnphong.frag" });
-	Shader blinnShader(blinnShaderPaths);
-
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
-	float planeVertices[] = 
-	{
-		// positions            // normals         // texcoords
-		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
-		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
-
-		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
-		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
-		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
-	};
-
-	// create plane VAO
-	// ----------------
-	glGenVertexArrays(1, &planeVAO);
-	glGenBuffers(1, &planeVBO);
-	glBindVertexArray(planeVAO);
-	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-	glBindVertexArray(0);
-
-	// load texture
-	// ------------
-	unsigned int floorTexture = LoadTexture("res/texture/wood.png");
-
-	// configure shadow map FBO
-	// ------------------------
-	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-	unsigned int shadowmapFBO;
-	glGenFramebuffers(1, &shadowmapFBO);
-	// create shadow map
-	unsigned int shadowmap;
-	glGenTextures(1, &shadowmap);
-	glBindTexture(GL_TEXTURE_2D, shadowmap);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-	float borderColor[] = { 1.0f, 1.0f,1.0f,1.0f };
-	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-	// attach depth texture
-	glBindFramebuffer(GL_FRAMEBUFFER, shadowmapFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowmap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-	// shader configuration
-	// --------------------
-	blinnShader.Bind();
-	blinnShader.SetUniform("floorTexture", 0);
-	blinnShader.SetUniform("shadowMap", 1);
+	Scene scene(0);
+	RenderPassManager renderPassManager(&scene);
 
 	// lighting info
 	// -------------
-	glm::vec3 lightPos(5.0f, 5.5f,5.0f);
+	glm::vec3 lightPos(5.0f, 5.5f, 5.0f);
 
 	while (!WindowManager::Instance()->IsTerminated())
 	{
@@ -143,52 +62,10 @@ int main()
 		// render
 		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// 1. render depth of scene to texture (from light's perspective)
-		// --------------------------------------------------------------
-		glm::mat4 lightProjection, lightView;
-		glm::mat4 lightSpaceMatrix;
-		float near_plane = 0.0f, far_plane = 25.5f;
-		lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
-		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-		lightSpaceMatrix = lightProjection * lightView;
-		// render scene from light's point of view
-		shadowmapShader.Bind();
-		shadowmapShader.SetUniform("lightSpaceMatrix", lightSpaceMatrix);
-
-		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, shadowmapFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		renderScene(shadowmapShader);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		// reset viewport
-		glViewport(0, 0, 800, 600);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-		// 2. render scene as normal using the generated depth/shadow map  
-		// --------------------------------------------------------------
-		glViewport(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		blinnShader.Bind();
-		glm::mat4 projection = scene.GetCamera()->GetProjectionMatrix();
-		glm::mat4 view = scene.GetCamera()->GetViewMatrix();
-		blinnShader.SetUniform("projection", projection);
-		blinnShader.SetUniform("view", view);
-		// set light uniforms
-		blinnShader.SetUniform("viewPos", scene.GetCamera()->GetPosition());
-		blinnShader.SetUniform("lightPos", lightPos);
-		blinnShader.SetUniform("lightSpaceMatrix", lightSpaceMatrix);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, shadowmap);
-		renderScene(blinnShader);
-
+		WindowManager::Instance()->Clear();
+		WindowManager::Instance()->Bind();
+		renderPassManager.Render();
+		
 
 		// swap buffers and poll IO events
 		// -------------------------------
@@ -198,6 +75,209 @@ int main()
 	glfwTerminate();
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//int main()
+//{
+//	if (!WindowManager::Instance()->Init("SRenderEngine", 800, 600))
+//	{
+//		std::cout<< "Could not initialize window class!\n";
+//		glfwTerminate();
+//	}
+//
+//	Scene scene;
+//
+//	//Model model("./res/Sponza/sponza.obj");
+//	
+//
+//	// configure global opengl state
+//	// -----------------------------
+//	glEnable(GL_DEPTH_TEST);
+//	glfwWindowHint(GLFW_SAMPLES, 16);
+//	glEnable(GL_MULTISAMPLE);
+//	// set depth function to less than AND equal for skybox depth trick.
+//	glDepthFunc(GL_LEQUAL);
+//	// enable seamless cubemap sampling for lower mip levels in the pre-filter map.
+//	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
+//
+//	// compile shader
+//	// --------------
+//	std::unordered_map<std::string, std::string> smShaderPaths;
+//	smShaderPaths.insert({ "vertex","res/shader/shadowmap_generation.vert" });
+//	smShaderPaths.insert({ "fragment","res/shader/shadowmap_generation.frag" });
+//	Shader shadowmapShader(smShaderPaths);
+//
+//	std::unordered_map<std::string, std::string> blinnShaderPaths;
+//	blinnShaderPaths.insert({ "vertex","res/shader/blinnphong.vert" });
+//	blinnShaderPaths.insert({ "fragment","res/shader/blinnphong.frag" });
+//	Shader blinnShader(blinnShaderPaths);
+//
+//	// set up vertex data (and buffer(s)) and configure vertex attributes
+//	// ------------------------------------------------------------------
+//	float planeVertices[] = 
+//	{
+//		// positions            // normals         // texcoords
+//		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+//		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+//		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+//
+//		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+//		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+//		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+//	};
+//
+//	// create plane VAO
+//	// ----------------
+//	glGenVertexArrays(1, &planeVAO);
+//	glGenBuffers(1, &planeVBO);
+//	glBindVertexArray(planeVAO);
+//	glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+//	glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+//	glEnableVertexAttribArray(0);
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+//	glEnableVertexAttribArray(1);
+//	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+//	glEnableVertexAttribArray(2);
+//	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+//	glBindVertexArray(0);
+//
+//	// load texture
+//	// ------------
+//	unsigned int floorTexture = LoadTexture("res/texture/wood.png");
+//
+//	// configure shadow map FBO
+//	// ------------------------
+//	const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+//	unsigned int shadowmapFBO;
+//	glGenFramebuffers(1, &shadowmapFBO);
+//	// create shadow map
+//	unsigned int shadowmap;
+//	glGenTextures(1, &shadowmap);
+//	glBindTexture(GL_TEXTURE_2D, shadowmap);
+//	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+//	float borderColor[] = { 1.0f, 1.0f,1.0f,1.0f };
+//	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+//	// attach depth texture
+//	glBindFramebuffer(GL_FRAMEBUFFER, shadowmapFBO);
+//	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shadowmap, 0);
+//	glDrawBuffer(GL_NONE);
+//	glReadBuffer(GL_NONE);
+//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//
+//
+//	// shader configuration
+//	// --------------------
+//	blinnShader.Bind();
+//	blinnShader.SetUniform("floorTexture", 0);
+//	blinnShader.SetUniform("shadowMap", 1);
+//
+//	// lighting info
+//	// -------------
+//	glm::vec3 lightPos(5.0f, 5.5f,5.0f);
+//
+//	while (!WindowManager::Instance()->IsTerminated())
+//	{
+//		// calculate per frame time
+//		// ------------------------
+//		float currentFrame = (float)glfwGetTime();
+//		deltaTime = currentFrame - lastFrame;
+//		lastFrame = currentFrame;
+//
+//		// process input events
+//		// --------------------
+//		scene.Update(deltaTime);
+//
+//		// render
+//		// ------
+//		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+//		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//		// 1. render depth of scene to texture (from light's perspective)
+//		// --------------------------------------------------------------
+//		glm::mat4 lightProjection, lightView;
+//		glm::mat4 lightSpaceMatrix;
+//		float near_plane = 0.0f, far_plane = 25.5f;
+//		lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
+//		lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+//		lightSpaceMatrix = lightProjection * lightView;
+//		// render scene from light's point of view
+//		shadowmapShader.Bind();
+//		shadowmapShader.SetUniform("lightSpaceMatrix", lightSpaceMatrix);
+//
+//		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+//		glBindFramebuffer(GL_FRAMEBUFFER, shadowmapFBO);
+//		glClear(GL_DEPTH_BUFFER_BIT);
+//		glActiveTexture(GL_TEXTURE0);
+//		glBindTexture(GL_TEXTURE_2D, floorTexture);
+//		renderScene(shadowmapShader);
+//		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+//
+//		// reset viewport
+//		glViewport(0, 0, 800, 600);
+//		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//
+//
+//		// 2. render scene as normal using the generated depth/shadow map  
+//		// --------------------------------------------------------------
+//		glViewport(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
+//		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//		blinnShader.Bind();
+//		glm::mat4 projection = scene.GetCamera()->GetProjectionMatrix();
+//		glm::mat4 view = scene.GetCamera()->GetViewMatrix();
+//		blinnShader.SetUniform("projection", projection);
+//		blinnShader.SetUniform("view", view);
+//		// set light uniforms
+//		blinnShader.SetUniform("viewPos", scene.GetCamera()->GetPosition());
+//		blinnShader.SetUniform("lightPos", lightPos);
+//		blinnShader.SetUniform("lightSpaceMatrix", lightSpaceMatrix);
+//		glActiveTexture(GL_TEXTURE0);
+//		glBindTexture(GL_TEXTURE_2D, floorTexture);
+//		glActiveTexture(GL_TEXTURE1);
+//		glBindTexture(GL_TEXTURE_2D, shadowmap);
+//		renderScene(blinnShader);
+//
+//
+//		// swap buffers and poll IO events
+//		// -------------------------------
+//		WindowManager::Instance()->Update();
+//	}
+//
+//	glfwTerminate();
+//	return 0;
+//}
 
 
 unsigned int LoadTexture(const char *path)

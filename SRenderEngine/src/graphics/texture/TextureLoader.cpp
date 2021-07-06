@@ -9,7 +9,7 @@ namespace sre
 {
 	std::unordered_map<std::string, Texture*> TextureLoader::mTextureCache;
 
-	Texture* TextureLoader::load2DTexture(std::string& path, TextureSettings* settings)
+	Texture* TextureLoader::Load2DTexture(const std::string& path, TextureSettings* settings)
 	{
 		// check the cache
 		auto iter = mTextureCache.find(path);
@@ -23,7 +23,7 @@ namespace sre
 		unsigned char *data = stbi_load(path.c_str(), &width, &height, &numComponents, 0);
 		if (!data) 
 		{
-			std::cout <<"texture load fail - path:"<< path<<"\n";
+			std::cout <<"TEXTURE LOAD FAIL - path:"<< path<<"\n";
 			stbi_image_free(data);
 			return nullptr;
 		}

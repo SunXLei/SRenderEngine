@@ -22,32 +22,32 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{4D8D4399-59D5-4AEA-B104-9D5866835D24}</ProjectGuid>
     <RootNamespace>SRenderEngine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -157,9 +157,10 @@
     <ClCompile Include="src\graphics\model\Model.cpp" />
     <ClCompile Include="src\graphics\model\shapes\Sphere.cpp" />
     <ClCompile Include="src\graphics\renderer\ModelRenderer.cpp" />
-    <ClCompile Include="src\graphics\renderer\RenderPass.cpp" />
+    <ClCompile Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.cpp" />
+    <ClCompile Include="src\graphics\renderer\renderpass\RenderPass.cpp" />
     <ClCompile Include="src\graphics\renderer\RenderPassManager.cpp" />
-    <ClCompile Include="src\graphics\renderer\ShadowmapPass.cpp" />
+    <ClCompile Include="src\graphics\renderer\renderpass\common\ShadowmapPass.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\texture\Texture.cpp" />
@@ -186,9 +187,10 @@
     <ClInclude Include="src\graphics\model\Model.h" />
     <ClInclude Include="src\graphics\model\shapes\Sphere.h" />
     <ClInclude Include="src\graphics\renderer\ModelRenderer.h" />
-    <ClInclude Include="src\graphics\renderer\RenderPass.h" />
+    <ClInclude Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.h" />
+    <ClInclude Include="src\graphics\renderer\renderpass\RenderPass.h" />
     <ClInclude Include="src\graphics\renderer\RenderPassManager.h" />
-    <ClInclude Include="src\graphics\renderer\ShadowmapPass.h" />
+    <ClInclude Include="src\graphics\renderer\renderpass\common\ShadowmapPass.h" />
     <ClInclude Include="src\graphics\Scene.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\graphics\texture\Texture.h" />

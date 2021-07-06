@@ -35,7 +35,7 @@ namespace sre
 		std::vector<unsigned int> mIndices;
 
 		unsigned int mVAO, mVBO, mEBO;
-		Material mMaterial;
+		Material mMaterial;  // initialize with default construct i.e. all material texture is nullptr
 	};
 
 }

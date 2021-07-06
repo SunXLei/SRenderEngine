@@ -177,6 +177,7 @@ void Shader::CompileShaderSource(const std::unordered_map<GLenum, std::string>& 
 		glShaderSource(shader, 1, &shaderSource, NULL);
 		glCompileShader(shader);
 
+		// TODO:Change GL_ENUM type to string for error message
 		CheckCompileErrors(shader, "COMPILE");
 
 		glAttachShader(mShaderID, shader);
@@ -192,13 +193,13 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 {
 	GLint success;
 	GLchar infoLog[1024];
-	if (type == "COMPILE")
+	if (type != "LINK")
 	{
 		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 		if (!success)
 		{
 			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog
+			std::cout << "ERROR::SHADER_COMPILATION_ERROR OF TYPE: " << type << "\n" << infoLog
 				<< "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 		
@@ -209,7 +210,7 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 		if (!success)
 		{
 			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::PROGRAmLINKING_ERROR of type: " << type << "\n" << infoLog
+			std::cout << "ERROR::SHADER_LINKING_ERROR: \n" << infoLog
 				<< "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 	}

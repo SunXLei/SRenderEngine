@@ -57,7 +57,7 @@
     <ClCompile Include="src\graphics\texture\TextureLoader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\renderer\ShadowmapPass.cpp">
+    <ClCompile Include="src\graphics\renderer\renderpass\common\ShadowmapPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\graphics\model\shapes\Cube.cpp">
@@ -66,10 +66,13 @@
     <ClCompile Include="src\graphics\model\shapes\Sphere.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\graphics\renderer\RenderPass.cpp">
+    <ClCompile Include="src\graphics\renderer\renderpass\RenderPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\platform\opengl\GLHelper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -121,7 +124,7 @@
     <ClInclude Include="src\graphics\texture\TextureLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\renderer\ShadowmapPass.h">
+    <ClInclude Include="src\graphics\renderer\renderpass\common\ShadowmapPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\model\shapes\Cube.h">
@@ -130,10 +133,13 @@
     <ClInclude Include="src\graphics\model\shapes\Sphere.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\graphics\renderer\RenderPass.h">
+    <ClInclude Include="src\graphics\renderer\renderpass\RenderPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\platform\opengl\GLHelper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
