@@ -75,14 +75,18 @@
     <ClCompile Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\platform\opengl\FrameBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\platform\opengl\GBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\blinnphong.vert" />
-    <None Include="res\shader\blinnphong.frag" />
     <None Include="res\shader\test.vert" />
     <None Include="res\shader\test.frag" />
-    <None Include="res\shader\shadowmap_generation.vert" />
-    <None Include="res\shader\shadowmap_generation.frag" />
+    <None Include="res\shader\ShadowmapGeneration.vert" />
+    <None Include="res\shader\ShadowmapGeneration.frag" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\platform\window\WindowManager.h">
@@ -140,6 +144,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\FrameBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\platform\opengl\GBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

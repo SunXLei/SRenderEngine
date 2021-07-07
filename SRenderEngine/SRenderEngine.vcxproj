@@ -165,6 +165,8 @@
     <ClCompile Include="src\graphics\Shader.cpp" />
     <ClCompile Include="src\graphics\texture\Texture.cpp" />
     <ClCompile Include="src\graphics\texture\TextureLoader.cpp" />
+    <ClCompile Include="src\platform\opengl\FrameBuffer.cpp" />
+    <ClCompile Include="src\platform\opengl\GBuffer.cpp" />
     <ClCompile Include="src\platform\opengl\GLHelper.cpp" />
     <ClCompile Include="src\platform\window\InputManager.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -172,10 +174,8 @@
     <ClCompile Include="src\platform\window\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\blinnphong.frag" />
-    <None Include="res\shader\blinnphong.vert" />
-    <None Include="res\shader\shadowmap_generation.frag" />
-    <None Include="res\shader\shadowmap_generation.vert" />
+    <None Include="res\shader\ShadowmapGeneration.frag" />
+    <None Include="res\shader\ShadowmapGeneration.vert" />
     <None Include="res\shader\test.frag" />
     <None Include="res\shader\test.vert" />
   </ItemGroup>
@@ -196,6 +196,8 @@
     <ClInclude Include="src\graphics\texture\Texture.h" />
     <ClInclude Include="src\graphics\texture\TextureLoader.h" />
     <ClInclude Include="src\macros.h" />
+    <ClInclude Include="src\platform\opengl\FrameBuffer.h" />
+    <ClInclude Include="src\platform\opengl\GBuffer.h" />
     <ClInclude Include="src\platform\opengl\GLHelper.h" />
     <ClInclude Include="src\platform\window\InputManager.h" />
     <ClInclude Include="src\platform\window\WindowManager.h" />

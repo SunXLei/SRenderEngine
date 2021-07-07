@@ -9,7 +9,7 @@ namespace sre
 	{
 	public:
 		RenderPass(Scene *scene);
-		~RenderPass();
+		virtual ~RenderPass();
 
 	protected:
 		Scene* mScene;

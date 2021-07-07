@@ -3,7 +3,7 @@
 namespace sre
 {
 	RenderPassManager::RenderPassManager(Scene* scene):
-		mScene(scene), mFowardLightingPass(scene)
+		mScene(scene), mFowardLightingPass(scene), mShadowmapPass(scene)
 	{
 
 	}
@@ -16,6 +16,7 @@ namespace sre
 	void RenderPassManager::Render()
 	{
 		// it's a simple test now
-		mFowardLightingPass.Render();
+		ShadowmapPassOutput smOutput = mShadowmapPass.Render();
+		mFowardLightingPass.Render(smOutput);
 	}
 }

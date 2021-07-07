@@ -14,3 +14,10 @@
 #define CAMERA_FOV 60.0f
 #define NEAR_PLANE 0.3f
 #define FAR_PLANE 5000.0f
+
+
+// Shadowmap Options
+#define SHADOWMAP_RESOLUTION_X 1024
+#define SHADOWMAP_RESOLUTION_Y 1024
+#define SHADOWMAP_NEAR_PLANE -1.0f
+#define SHADOWMAP_FAR_PLANE 100.0f
