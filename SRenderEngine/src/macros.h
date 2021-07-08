@@ -9,7 +9,7 @@
 #define MSAA_SAMPLE_AMOUNT 4 // Only used in forward rendering & for water
 
 // Camera Settings
-#define CAMERA_SPEED 15.0f
+#define CAMERA_SPEED 5.0f
 #define CAMERA_ROTATION_SENSITIVITY 0.15f
 #define CAMERA_FOV 60.0f
 #define NEAR_PLANE 0.3f
@@ -17,7 +17,7 @@
 
 
 // Shadowmap Options
-#define SHADOWMAP_RESOLUTION_X 1024
-#define SHADOWMAP_RESOLUTION_Y 1024
+#define SHADOWMAP_RESOLUTION_X 2048
+#define SHADOWMAP_RESOLUTION_Y 2048
 #define SHADOWMAP_NEAR_PLANE -1.0f
 #define SHADOWMAP_FAR_PLANE 100.0f

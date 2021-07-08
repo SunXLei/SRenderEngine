@@ -1,5 +1,6 @@
 #version 430 core
 
+// struct define
 struct Material 
 {
 	sampler2D texture_albedo;
@@ -9,18 +10,18 @@ struct Material
 	sampler2D texture_ao;
 };
 
-out vec4 FragColor;
-
+// input and output
 in vec3 fragPos;
-in vec4 FragPosLightSpace;
 in vec3 normal;
 in vec2 texCoords;
+in vec4 fragPosLightSpace;
+out vec4 FragColor;
 
-uniform vec3 lightPos;
+// lighting
+uniform sampler2D shadowMap;
+uniform vec3 directionalLightDir;
 uniform vec3 viewPos;
 uniform Material material;
-uniform sampler2D floorTexture;
-uniform sampler2D shadowMap;
 
 
 float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
@@ -37,9 +38,9 @@ float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
 	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);  
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-	for(int x = -2; x <= 2; ++x)
+	for(int x = -5; x <= 5; ++x)
 	{
-		for(int y = -2; y <= 2; ++y)
+		for(int y = -5; y <= 5; ++y)
 		{
 			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
 			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
@@ -60,7 +61,7 @@ void main()
 	ambient = 0.05f * color; 
 
 	// diffuse
-	vec3 lightDir = normalize(lightPos); // directional light
+	vec3 lightDir = normalize(directionalLightDir); // directional light
 	float NdotL = max(dot(lightDir, normal), 0.0f);
 	diffuse = color * NdotL;
 
@@ -71,7 +72,7 @@ void main()
 	specular = vec3(0.3) * pow(NdotH, 64.0f);
 	
     // calculate shadow
-    float shadow = ShadowCalculation(FragPosLightSpace, normal, lightDir);   
+    float shadow = ShadowCalculation(fragPosLightSpace, normal, lightDir);   
 	FragColor = vec4(ambient + (1-shadow)*(diffuse + specular) , 1.0f);
 	// FragColor = vec4(color, 1.0f);
 }

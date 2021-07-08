@@ -10,7 +10,7 @@ namespace sre
 {
 	struct ShadowmapPassOutput 
 	{
-		glm::mat4 directionalLightViewProjMatrix;
+		glm::mat4 lightSpaceMatrix;
 		FrameBuffer* shadowmapFramebuffer;
 	};
 

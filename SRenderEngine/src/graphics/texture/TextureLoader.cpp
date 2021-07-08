@@ -19,7 +19,6 @@ namespace sre
 
 		// load texture
 		int width, height, numComponents;
-		std::cout << path << "\n";
 		unsigned char *data = stbi_load(path.c_str(), &width, &height, &numComponents, 0);
 		if (!data) 
 		{
@@ -47,6 +46,7 @@ namespace sre
 		mTextureCache.insert(std::pair<std::string, Texture*>(path, texture));
 		stbi_image_free(data);
 
+		std::cout  << path << " load successfully!\n";
 		return mTextureCache[path];
 	}
 

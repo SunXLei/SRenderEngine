@@ -151,6 +151,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\graphics\Camera.cpp" />
+    <ClCompile Include="src\graphics\light\BaseLight.cpp" />
+    <ClCompile Include="src\graphics\light\DirectionalLight.cpp" />
+    <ClCompile Include="src\graphics\light\LightManager.cpp" />
+    <ClCompile Include="src\graphics\light\PointLight.cpp" />
+    <ClCompile Include="src\graphics\light\SpotLight.cpp" />
     <ClCompile Include="src\graphics\model\shapes\Cube.cpp" />
     <ClCompile Include="src\graphics\model\Material.cpp" />
     <ClCompile Include="src\graphics\model\Mesh.cpp" />
@@ -174,13 +179,16 @@
     <ClCompile Include="src\platform\window\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="res\shader\ShadowmapGeneration.frag" />
-    <None Include="res\shader\ShadowmapGeneration.vert" />
     <None Include="res\shader\test.frag" />
     <None Include="res\shader\test.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\graphics\Camera.h" />
+    <ClInclude Include="src\graphics\light\BaseLight.h" />
+    <ClInclude Include="src\graphics\light\DirectionalLight.h" />
+    <ClInclude Include="src\graphics\light\LightManager.h" />
+    <ClInclude Include="src\graphics\light\PointLight.h" />
+    <ClInclude Include="src\graphics\light\SpotLight.h" />
     <ClInclude Include="src\graphics\model\shapes\Cube.h" />
     <ClInclude Include="src\graphics\model\Material.h" />
     <ClInclude Include="src\graphics\model\Mesh.h" />

@@ -77,7 +77,7 @@ namespace sre
 		//std::cout << (centerTranslate) << "\n";
 		//std::cout << "================================\n";
 
-		// TODO: calculate the model's center first and move it to origin first
+		// TODO: calculate the model's center and move it to origin first
 		modelMatrix = translate * rotate * scale * centerTranslate;
 		shader->SetUniform("model", modelMatrix);
 

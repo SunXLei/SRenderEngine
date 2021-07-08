@@ -5,6 +5,7 @@
 
 namespace sre
 {
+	// TODO: this framebuffer structure may need to change, i.e. the add attachment functions are not convinent now
 	class FrameBuffer
 	{
 	public:

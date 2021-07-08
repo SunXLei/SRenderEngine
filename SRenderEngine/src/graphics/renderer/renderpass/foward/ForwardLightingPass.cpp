@@ -8,46 +8,93 @@ namespace sre
 	FowardLightingPass::FowardLightingPass(Scene* scene) :
 		RenderPass(scene)
 	{
+		// create blinn shader
 		std::unordered_map<std::string, std::string> blinnShaderPaths;
 		blinnShaderPaths.insert({ "vertex","res/shader/forward/BlinnPhong.vert" });
 		blinnShaderPaths.insert({ "fragment","res/shader/forward/BlinnPhong.frag" });
 		mBlinnShader = new Shader(blinnShaderPaths);
+
+		// create pbr shader
+		std::unordered_map<std::string, std::string> pbrShaderPaths;
+		pbrShaderPaths.insert({ "vertex","res/shader/forward/PBRLighting.vert" });
+		pbrShaderPaths.insert({ "fragment","res/shader/forward/PBRLighting.frag" });
+		mPBRShader = new Shader(pbrShaderPaths);
+
 	}
 
 	FowardLightingPass::~FowardLightingPass()
 	{
 		delete mBlinnShader;
+		delete mPBRShader;
 	}
 
-	void FowardLightingPass::Render(const ShadowmapPassOutput &smOutput)
+	void FowardLightingPass::Render(const ShadowmapPassOutput &smOutput, bool isUsePBR /* = true */ )
 	{
+		// bind default framebuffer
 		WindowManager::Bind();
+		WindowManager::Clear();
 		glViewport(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
-		glm::mat4 lightSpaceMatrix = smOutput.directionalLightViewProjMatrix;
-		smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind();
-		mBlinnShader->Bind();
-		mBlinnShader->SetUniform("shadowMap", 0);
-		mBlinnShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
 
+		// enable msaa
+		glEnable(GL_MULTISAMPLE);
 
+		// setup
 		ModelRenderer* modelRenderer = mScene->GetModelRenderer();
+		LightManager* lightManager = mScene->GetLightManager();
 		Camera* camera = mScene->GetCamera();
-		mScene->AddModelsToRender();
-		mBlinnShader->Bind();
-		// Set view, projection matrix, note the model matrix is set in modelrenderer
-		mBlinnShader->SetUniform("view", camera->GetViewMatrix());
-		mBlinnShader->SetUniform("projection", camera->GetProjectionMatrix());
+
+		if (isUsePBR)	// pbr shader
+		{
+			// set shadowmap pass output to current shader
+			glm::mat4 lightSpaceMatrix = smOutput.lightSpaceMatrix;
+			smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind(0);
+			mPBRShader->Bind();
+			mPBRShader->SetUniform("shadowMap", 0);
+			mPBRShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
+
+			// set light
+			lightManager->BindCurrentLights(mPBRShader);
+
+			// set view, projection matrix, note the model matrix is set in modelrenderer
+			mPBRShader->SetUniform("view", camera->GetViewMatrix());
+			mPBRShader->SetUniform("viewPos", camera->GetPosition());
+			mPBRShader->SetUniform("projection", camera->GetProjectionMatrix());
+
+			// add models to renderer
+			mScene->AddModelsToRender();
+
+			// add models to renderer
+			modelRenderer->SetupRenderState();
+
+			// render
+			modelRenderer->Render(mPBRShader, true);
+		}
+		else			// simple blinn shader
+		{
+			// set shadowmap pass output to current shader
+			glm::mat4 lightSpaceMatrix = smOutput.lightSpaceMatrix;
+			smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind(0);
+			mBlinnShader->Bind();
+			mBlinnShader->SetUniform("shadowMap", 0);
+			mBlinnShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
+
+			// set view, projection matrix, note the model matrix is set in modelrenderer
+			mBlinnShader->SetUniform("view", camera->GetViewMatrix());
+			mBlinnShader->SetUniform("viewPos", camera->GetPosition());
+			mBlinnShader->SetUniform("projection", camera->GetProjectionMatrix());
+
+			// fake a directional light
+			mBlinnShader->SetUniform("directionalLightDir", glm::vec3(1.0f, 1.0f, 1.0f));
+
+			// add models to renderer
+			mScene->AddModelsToRender();
+
+			// add models to renderer
+			modelRenderer->SetupRenderState();
+
+			// render
+			modelRenderer->Render(mBlinnShader, true);
+		}
 		
-		// set eye position
-		mBlinnShader->SetUniform("viewPos", camera->GetPosition());
-
-		// set light
-		mBlinnShader->SetUniform("lightPos", glm::vec3(1.0f, 1.0f, 1.0f));
-
-
-		// draw
-		mBlinnShader->Bind();
-		modelRenderer->SetupRenderState();
-		modelRenderer->Render(mBlinnShader, true);
 	}
 }

@@ -14,9 +14,10 @@ namespace sre
 		FowardLightingPass(Scene* scene);
 		~FowardLightingPass();
 
-		void Render(const ShadowmapPassOutput &smOutput);
+		void Render(const ShadowmapPassOutput &smOutput, bool isUsePBR = true);
 
 	private:
-		Shader* mBlinnShader; // TODO: remember to release
+		Shader* mBlinnShader;
+		Shader* mPBRShader;
 	};
 }

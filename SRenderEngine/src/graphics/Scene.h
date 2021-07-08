@@ -5,6 +5,7 @@
 #include "./Camera.h"
 #include "./model/Model.h"
 #include "./renderer/ModelRenderer.h"
+#include "./graphics/light/LightManager.h"
 
 
 namespace sre
@@ -23,6 +24,7 @@ namespace sre
 
 		inline Camera* GetCamera() { return mCamera; }
 		inline ModelRenderer* GetModelRenderer() { return mModelRenderer; }
+		inline LightManager* GetLightManager() { return mLightManager; }
 
 	public:
 		void Init(int sceneID);
@@ -32,6 +34,7 @@ namespace sre
 		//TODO: remember to free pointer
 		Camera* mCamera;
 		ModelRenderer* mModelRenderer;
+		LightManager* mLightManager;
 
 		//TODO: remember to free pointer
 		std::vector<Model*> mModels;

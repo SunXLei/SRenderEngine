@@ -17,6 +17,6 @@ namespace sre
 	{
 		// it's a simple test now
 		ShadowmapPassOutput smOutput = mShadowmapPass.Render();
-		mFowardLightingPass.Render(smOutput);
+		mFowardLightingPass.Render(smOutput, true);
 	}
 }

@@ -19,8 +19,9 @@ namespace sre
 	private:
 		Scene* mScene;  // mScene's memory is managed outside
 
-		FowardLightingPass mFowardLightingPass;
+
 		ShadowmapPass mShadowmapPass;
+		FowardLightingPass mFowardLightingPass;
 	};
 
 }
