@@ -20,6 +20,12 @@ namespace sre
 		pbrShaderPaths.insert({ "fragment","res/shader/forward/PBRLighting.frag" });
 		mPBRShader = new Shader(pbrShaderPaths);
 
+		// create debug shader
+		std::unordered_map<std::string, std::string> debugShaderPaths;
+		debugShaderPaths.insert({ "vertex","res/shader/common/DebugDisplay.vert" });
+		debugShaderPaths.insert({ "fragment","res/shader/common/DebugDisplay.frag" });
+		mDebugShader = new Shader(debugShaderPaths);
+
 	}
 
 	FowardLightingPass::~FowardLightingPass()
@@ -43,11 +49,12 @@ namespace sre
 		LightManager* lightManager = mScene->GetLightManager();
 		Camera* camera = mScene->GetCamera();
 
+		// get shadowmap pass output and bind shadowmap to 0 texture unit
+		glm::mat4 lightSpaceMatrix = smOutput.lightSpaceMatrix;
+		smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind(0);
+
 		if (isUsePBR)	// pbr shader
 		{
-			// set shadowmap pass output to current shader
-			glm::mat4 lightSpaceMatrix = smOutput.lightSpaceMatrix;
-			smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind(0);
 			mPBRShader->Bind();
 			mPBRShader->SetUniform("shadowMap", 0);
 			mPBRShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
@@ -71,9 +78,6 @@ namespace sre
 		}
 		else			// simple blinn shader
 		{
-			// set shadowmap pass output to current shader
-			glm::mat4 lightSpaceMatrix = smOutput.lightSpaceMatrix;
-			smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind(0);
 			mBlinnShader->Bind();
 			mBlinnShader->SetUniform("shadowMap", 0);
 			mBlinnShader->SetUniform("lightSpaceMatrix", lightSpaceMatrix);
@@ -96,5 +100,11 @@ namespace sre
 			modelRenderer->Render(mBlinnShader, true);
 		}
 		
+		// just for debug
+		glViewport(100, 0 , 200, 200);
+		mDebugShader->Bind();
+		mDebugShader->SetUniform("displayTexture", 0);
+		modelRenderer->NDC_Plane.Draw();
+
 	}
 }

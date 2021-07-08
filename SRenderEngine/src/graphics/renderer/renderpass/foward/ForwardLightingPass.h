@@ -19,5 +19,6 @@ namespace sre
 	private:
 		Shader* mBlinnShader;
 		Shader* mPBRShader;
+		Shader* mDebugShader;
 	};
 }

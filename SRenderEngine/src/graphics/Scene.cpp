@@ -60,7 +60,7 @@ namespace sre
 		cube3->SetPosition(glm::vec3(1.0f, 3.0f, 3.0f));
 		cube3->SetScale(glm::vec3(2.0f, 2.0f, 2.0f));
 		gun->SetPosition(glm::vec3(3.0f, 2.0f, 0.0f));
-		gun->SetScale(glm::vec3(2.0f, 2.0f, 2.0f));
+		gun->SetScale(glm::vec3(5.0f, 5.0f, 5.0f));
 
 		TextureSettings srgbTextureSettings;
 		srgbTextureSettings.IsSRGB = true;
