@@ -14,6 +14,7 @@
 #include "./graphics/Scene.h"
 #include "./graphics/model/Model.h"
 #include "./graphics/renderer/RenderPassManager.h"
+#include "./graphics/texture/TextureLoader.h"
 
 unsigned int LoadTexture(const char *path);
 void renderScene( Shader &shader);
@@ -40,6 +41,7 @@ int main()
 		glfwTerminate();
 	}
 
+	TextureLoader::InitDefaultTextures();
 	Scene scene(0);
 	RenderPassManager renderPassManager(&scene);
 

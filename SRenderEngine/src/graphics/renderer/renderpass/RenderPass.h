@@ -1,5 +1,6 @@
 #pragma once
 
+#include "./graphics/texture/Texture.h"
 #include "./graphics/Scene.h"
 
 namespace sre
@@ -11,8 +12,10 @@ namespace sre
 		RenderPass(Scene *scene);
 		virtual ~RenderPass();
 
+		void DisplayTexture(int startx, int starty, int width, int height, Texture* texture, int unit = 9);
+
 	protected:
 		Scene* mScene;
-
+		Shader* mDebugShader;
 	};
 }

@@ -61,7 +61,7 @@ namespace sre
 		modelRenderer->Render(mShadowmapGenShader, false);
 
 
-		// Render pass output
+		// renderpass output
 		ShadowmapPassOutput passOutput;
 		passOutput.lightSpaceMatrix = directionalLightViewProjMatrix;
 		passOutput.shadowmapFramebuffer = mShadowmapFB;

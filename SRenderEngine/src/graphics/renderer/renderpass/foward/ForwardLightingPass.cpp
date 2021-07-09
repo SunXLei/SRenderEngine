@@ -20,12 +20,6 @@ namespace sre
 		pbrShaderPaths.insert({ "fragment","res/shader/forward/PBRLighting.frag" });
 		mPBRShader = new Shader(pbrShaderPaths);
 
-		// create debug shader
-		std::unordered_map<std::string, std::string> debugShaderPaths;
-		debugShaderPaths.insert({ "vertex","res/shader/common/DebugDisplay.vert" });
-		debugShaderPaths.insert({ "fragment","res/shader/common/DebugDisplay.frag" });
-		mDebugShader = new Shader(debugShaderPaths);
-
 	}
 
 	FowardLightingPass::~FowardLightingPass()
@@ -49,7 +43,7 @@ namespace sre
 		LightManager* lightManager = mScene->GetLightManager();
 		Camera* camera = mScene->GetCamera();
 
-		// get shadowmap pass output and bind shadowmap to 0 texture unit
+		// get shadowmap pass output and bind shadowmap to texture unit 0 
 		glm::mat4 lightSpaceMatrix = smOutput.lightSpaceMatrix;
 		smOutput.shadowmapFramebuffer->GetDepthStencilTexture()->bind(0);
 
@@ -70,7 +64,7 @@ namespace sre
 			// add models to renderer
 			mScene->AddModelsToRender();
 
-			// add models to renderer
+			// set renderer modes
 			modelRenderer->SetupRenderState();
 
 			// render
@@ -93,7 +87,7 @@ namespace sre
 			// add models to renderer
 			mScene->AddModelsToRender();
 
-			// add models to renderer
+			// set renderer modes
 			modelRenderer->SetupRenderState();
 
 			// render
@@ -101,10 +95,6 @@ namespace sre
 		}
 		
 		// just for debug
-		glViewport(100, 0 , 200, 200);
-		mDebugShader->Bind();
-		mDebugShader->SetUniform("displayTexture", 0);
-		modelRenderer->NDC_Plane.Draw();
-
+		DisplayTexture(0, 0, 150, 150, smOutput.shadowmapFramebuffer->GetDepthStencilTexture(), 10);
 	}
 }

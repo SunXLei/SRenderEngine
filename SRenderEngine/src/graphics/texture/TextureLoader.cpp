@@ -7,7 +7,30 @@
 
 namespace sre
 {
+	// We must define the static variables outside the class first to get memory
 	std::unordered_map<std::string, Texture*> TextureLoader::mTextureCache;
+	Texture* TextureLoader::sDefaultAlbedo = nullptr;
+	Texture* TextureLoader::sDefaultNormal = nullptr;
+	Texture* TextureLoader::sWhiteTexture = nullptr;
+	Texture* TextureLoader::sBlackTexture = nullptr;
+
+	void TextureLoader::InitDefaultTextures()
+	{
+		// Setup texture and minimal filtering because they are 1x1 textures so they require none
+		TextureSettings srgbTextureSettings, formalTextureSettings;
+		srgbTextureSettings.IsSRGB = true; formalTextureSettings.IsSRGB = false;
+		srgbTextureSettings.TextureMinificationFilterMode = GL_NEAREST;
+		srgbTextureSettings.TextureMagnificationFilterMode = GL_NEAREST;
+		srgbTextureSettings.HasMips = false;
+		formalTextureSettings.TextureMinificationFilterMode = GL_NEAREST;
+		formalTextureSettings.TextureMagnificationFilterMode = GL_NEAREST;
+		formalTextureSettings.HasMips = false;
+
+		sDefaultAlbedo = Load2DTexture(std::string("res/texture/defaultAlbedo.png"), &srgbTextureSettings);
+		sDefaultNormal = Load2DTexture(std::string("res/texture/defaultNormal.png"), &formalTextureSettings);
+		sWhiteTexture = Load2DTexture(std::string("res/texture/white.png"), &formalTextureSettings);
+		sBlackTexture = Load2DTexture(std::string("res/texture/black.png"), &formalTextureSettings);
+	}
 
 	Texture* TextureLoader::Load2DTexture(const std::string& path, TextureSettings* settings)
 	{
@@ -54,6 +77,5 @@ namespace sre
 	{
 		for (auto &item : mTextureCache)
 			delete item.second;
-		
 	}
 }

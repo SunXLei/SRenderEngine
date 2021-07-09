@@ -30,36 +30,32 @@ namespace sre
 		if (mAlbedoMap) 
 			mAlbedoMap->bind(currentTextureUnit++);
 		else 
-		{ }
-			//TextureLoader::GetDefaultAlbedo()->bind(currentTextureUnit++);
+			TextureLoader::GetDefaultAlbedo()->bind(currentTextureUnit++);
+		
 
 		shader->SetUniform("material.texture_normal", currentTextureUnit);
 		if (mNormalMap) 
 			mNormalMap->bind(currentTextureUnit++);
 		else 
-		{ }
-			//TextureLoader::GetDefaultNormal()->bind(currentTextureUnit++);
+			TextureLoader::GetDefaultNormal()->bind(currentTextureUnit++);
 
 		shader->SetUniform("material.texture_metallic", currentTextureUnit);
 		if (mMetallicMap) 
 			mMetallicMap->bind(currentTextureUnit++);
 		else 
-		{ }
-			//TextureLoader::getDefaultMetallic()->bind(currentTextureUnit++);
+			TextureLoader::GetDefaultMetallic()->bind(currentTextureUnit++);
 
 		shader->SetUniform("material.texture_roughness", currentTextureUnit);
 		if (mRoughnessMap) 
 			mRoughnessMap->bind(currentTextureUnit++);
 		else 
-		{ }
-			//TextureLoader::getDefaultRoughness()->bind(currentTextureUnit++);
+			TextureLoader::GetDefaultRoughness()->bind(currentTextureUnit++);
 
 		shader->SetUniform("material.texture_ao", currentTextureUnit);
 		if (mAOMap) 
 			mAOMap->bind(currentTextureUnit++);
 		else 
-		{ }
-			//TextureLoader::getDefaultAO()->bind(currentTextureUnit++);
+			TextureLoader::GetDefaultAO()->bind(currentTextureUnit++);
 
 
 		//shader->SetUniform("material.texture_displacement", currentTextureUnit);
