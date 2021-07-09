@@ -95,6 +95,6 @@ namespace sre
 		}
 		
 		// just for debug
-		DisplayTexture(0, 0, 150, 150, smOutput.shadowmapFramebuffer->GetDepthStencilTexture(), 10);
+		DisplayTexture(0, 0, 150, 150, smOutput.shadowmapFramebuffer->GetDepthStencilTexture(),1, 10);
 	}
 }

@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+
+#include "./graphics/texture/Texture.h"
 #include "./FrameBuffer.h"
 
 namespace sre
@@ -7,6 +10,22 @@ namespace sre
 	class GBuffer :public FrameBuffer
 	{
 	public:
+		GBuffer(int width, int height);
+		~GBuffer();
 
+		inline Texture* GetRenderTarget(int index) { return mRenderTargets[index]; }
+
+	private:
+		void Init();
+
+	private:
+		int mRenderTargetsCount;
+
+
+		// 0 RGBA8  ->       albedo.r     albedo.g        albedo.b     albedo's alpha
+		// 1 RGB32F ->       normal.x     normal.y        normal.z
+		// 2 RGB32F ->       pos.x		  pos.y		      pos.z
+		// 3 RGB8  ->        roughness    metallic        ambientOcclusion
+		std::vector<Texture*> mRenderTargets;
 	};
 }

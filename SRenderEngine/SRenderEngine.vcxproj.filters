@@ -105,6 +105,9 @@
     <ClCompile Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\renderer\renderpass\postprocess\PassThroughPass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\test.vert" />
@@ -196,6 +199,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer\renderpass\postprocess\PassThroughPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

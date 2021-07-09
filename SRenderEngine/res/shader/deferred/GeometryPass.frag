@@ -9,68 +9,31 @@ struct Material
 	sampler2D texture_ao;
 };
 
-out vec4 FragColor;
-
+// input and output
 in vec3 fragPos;
-in vec3 normal;
+in mat3 TBN;
+in vec3 baseNormal; // for the case with out normal mapping
 in vec2 texCoords;
-in vec4 fragPosLightSpace;
 
-uniform vec3 lightPos;
-uniform vec3 viewPos;
+layout (location = 0) out vec4 gb_Albedo;
+layout (location = 1) out vec3 gb_Normal;
+layout (location = 2) out vec3 gb_Pos;
+layout (location = 3) out vec3 gb_Mixture;
+
 uniform Material material;
-uniform sampler2D shadowMap;
-
-
-float ShadowCalculation(vec4 fragPosLightSpace, vec3 normal, vec3 lightDir)
-{
-    // perform perspective divide
-    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-    // transform to [0,1] range
-    projCoords = projCoords * 0.5 + 0.5;
-    // get closest depth value from light's perspective (using [0,1] range fragPosLight as coords)
-    float closestDepth = texture(shadowMap, projCoords.xy).r; 
-    // get depth of current fragment from light's perspective
-    float currentDepth = projCoords.z;
-    // check whether current frag pos is in shadow
-	float bias = max(0.05 * (1.0 - dot(normal, lightDir)), 0.005);  
-	float shadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(shadowMap, 0);
-	for(int x = -5; x <= 5; ++x)
-	{
-		for(int y = -5; y <= 5; ++y)
-		{
-			float pcfDepth = texture(shadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
-			shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
-		}    
-	}
-   shadow /= 25.0;
-   if(projCoords.z > 1.0)
-        shadow = 0.0;
-    return shadow;
-}
 
 void main()
 {
-	vec3 color = texture(material.texture_albedo, texCoords).rgb;
-	vec3 ambient, diffuse, specular;
+	vec4 albedo = texture(material.texture_albedo, texCoords);
+	vec3 normal = texture(material.texture_normal, texCoords).rgb;
+	normal = normal * 2.0f - 1.0f;
+	normal = normalize(TBN * normal);
+	float metallic = texture(material.texture_metallic, texCoords).r;
+	float roughness = texture(material.texture_roughness, texCoords).r;
+	float ao = texture(material.texture_ao, texCoords).r;
 
-	// ambient
-	ambient = 0.05f * color; 
-
-	// diffuse
-	vec3 lightDir = normalize(lightPos); // directional light
-	float NdotL = max(dot(lightDir, normal), 0.0f);
-	diffuse = color * NdotL;
-
-	// specular;
-	vec3 viewDir = normalize(viewPos - fragPos);
-	vec3 h = normalize(lightDir + viewDir);
-	float NdotH = max(dot(normal,h), 0.0f);
-	specular = vec3(0.3) * pow(NdotH, 64.0f);
-	
-    // calculate shadow
-    float shadow = ShadowCalculation(fragPosLightSpace, normal, lightDir);   
-	FragColor = vec4(ambient + (1-shadow)*(diffuse + specular) , 1.0f);
-	// FragColor = vec4(color, 1.0f);
+	gb_Albedo = albedo;
+	gb_Normal = normal;
+	gb_Pos = fragPos;
+	gb_Mixture = vec3(roughness, metallic, ao);
 }

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "./graphics/Scene.h"
-#include "./graphics/renderer/renderpass/foward/ForwardLightingPass.h"
 #include "./graphics/renderer/renderpass/common/ShadowmapPass.h"
+#include "./graphics/renderer/renderpass/foward/ForwardLightingPass.h"
+#include "./graphics/renderer/renderpass/deferred/DeferredGeometryPass.h"
+#include "./graphics/renderer/renderpass/deferred/DeferredLightingPass.h"
 
 namespace sre
 {
@@ -22,6 +24,8 @@ namespace sre
 
 		ShadowmapPass mShadowmapPass;
 		FowardLightingPass mFowardLightingPass;
+		DeferredGeometryPass mDeferredGeometryPass;
+		DeferredLightingPass mDeferredLightingPass;
 	};
 
 }

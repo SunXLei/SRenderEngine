@@ -8,12 +8,6 @@
 
 namespace sre
 {
-	struct ShadowmapPassOutput 
-	{
-		glm::mat4 lightSpaceMatrix;
-		FrameBuffer* shadowmapFramebuffer;
-	};
-
 	class ShadowmapPass: public RenderPass
 	{
 	public:

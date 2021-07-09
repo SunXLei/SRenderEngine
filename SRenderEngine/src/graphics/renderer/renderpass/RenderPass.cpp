@@ -20,7 +20,9 @@ namespace sre
 		delete mDebugShader;
 	}
 
-	void RenderPass::DisplayTexture(int startx, int starty, int width, int height, Texture* texture, int unit /* = 9  */)
+	// displayChannel 1:red / 2:green / 3:blue / 4:rgb
+	void RenderPass::DisplayTexture(int startx, int starty, int width, int height, 
+		Texture* texture, int displayChannel /*= 4*/, int unit /* = 9  */)
 	{
 		// bind default framebuffer
 		WindowManager::Bind();
@@ -34,6 +36,7 @@ namespace sre
 		// bind texture
 		texture->bind(unit);
 		mDebugShader->SetUniform("displayTexture", unit);
+		mDebugShader->SetUniform("displayChannel", displayChannel);
 
 		// draw ndc plane
 		mScene->GetModelRenderer()->NDC_Plane.Draw();

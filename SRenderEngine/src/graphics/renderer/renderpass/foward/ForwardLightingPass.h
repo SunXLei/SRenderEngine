@@ -6,8 +6,6 @@
 
 namespace sre
 {
-	struct ShadowmapPassOutput;
-
 	class FowardLightingPass : public RenderPass
 	{
 	public:
