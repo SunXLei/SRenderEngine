@@ -40,48 +40,61 @@ namespace sre
 
 	}
 
-	void FrameBuffer::AddColorTexture(GLenum textureFormat, GLenum dataFormat, GLenum dataType, GLenum attachType)
+	void FrameBuffer::AddColorTexture(const TextureSettings& textureSettings, GLenum dataFormat, GLenum dataType, GLenum attachType)
 	{
 		// bind framebuffer first
 		Bind();
 
-		// create the color texture with settings and attach it to framebuffer
-		TextureSettings colorTextureSettings;
-		colorTextureSettings.TextureFormat = textureFormat;
-		colorTextureSettings.TextureWrapSMode = GL_CLAMP_TO_EDGE;
-		colorTextureSettings.TextureWrapTMode = GL_CLAMP_TO_EDGE;
-		colorTextureSettings.TextureMinificationFilterMode = GL_LINEAR;
-		colorTextureSettings.TextureMagnificationFilterMode = GL_LINEAR;
-		colorTextureSettings.HasMips = false;
+		//// create the color texture with settings and attach it to framebuffer
+		//TextureSettings colorTextureSettings;
+		//colorTextureSettings.TextureFormat = textureFormat;
+		//colorTextureSettings.TextureWrapSMode = GL_CLAMP_TO_EDGE;
+		//colorTextureSettings.TextureWrapTMode = GL_CLAMP_TO_EDGE;
+		//colorTextureSettings.TextureMinificationFilterMode = GL_LINEAR;
+		//colorTextureSettings.TextureMagnificationFilterMode = GL_LINEAR;
+		//colorTextureSettings.HasMips = false;
 
-		mColorTexture.SetTextureSettings(colorTextureSettings);
+		mColorTexture.SetTextureSettings(textureSettings);
 		mColorTexture.Generate2DTexture(mWidth, mHeight, dataFormat, dataType);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, attachType, GL_TEXTURE_2D, mColorTexture.GetTextureId(), 0);
+
+		UnBind();
 	}
 
-	void FrameBuffer::AddDepthStencilTexture(GLenum textureFormat, GLenum dataFormat, GLenum dataType, GLenum attachType)
+	void FrameBuffer::AddDepthStencilTexture(const TextureSettings& textureSettings, GLenum dataFormat, GLenum dataType, GLenum attachType)
 	{
 		// bind framebuffer first
 		Bind();
 
-		// create the depth/stencil texture with settings and attach it to framebuffer
-		TextureSettings depthStencilSettings;
-		depthStencilSettings.TextureFormat = textureFormat;
-		depthStencilSettings.TextureWrapSMode = GL_CLAMP_TO_BORDER;
-		depthStencilSettings.TextureWrapTMode = GL_CLAMP_TO_BORDER;
-		depthStencilSettings.TextureMinificationFilterMode = GL_NEAREST;
-		depthStencilSettings.TextureMagnificationFilterMode = GL_NEAREST;
-		depthStencilSettings.HasBorder = true;
-		depthStencilSettings.HasMips = false;
-		mDepthStencilTexture.SetTextureSettings(depthStencilSettings);
+		//// create the depth/stencil texture with settings and attach it to framebuffer
+		//TextureSettings depthStencilSettings;
+		//depthStencilSettings.TextureFormat = textureFormat;
+		//depthStencilSettings.TextureWrapSMode = GL_CLAMP_TO_BORDER;
+		//depthStencilSettings.TextureWrapTMode = GL_CLAMP_TO_BORDER;
+		//depthStencilSettings.TextureMinificationFilterMode = GL_NEAREST;
+		//depthStencilSettings.TextureMagnificationFilterMode = GL_NEAREST;
+		//depthStencilSettings.HasBorder = true;
+		//depthStencilSettings.HasMips = false;
+
+		mDepthStencilTexture.SetTextureSettings(textureSettings);
 		mDepthStencilTexture.Generate2DTexture(mWidth, mHeight, dataFormat, dataType);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, attachType, GL_TEXTURE_2D, mDepthStencilTexture.GetTextureId(), 0);
 
+		UnBind();
 	}
 
-	void FrameBuffer::AddDepthStencilRBO(GLenum rboFormat)
+	// e.g.   GL_DEPTH24_STENCIL8  ,  GL_DEPTH_STENCIL_ATTACHMENT
+	void FrameBuffer::AddDepthStencilRBO(GLenum rboFormat, GLenum attachType)
 	{
+		mIsUseRBO = true;
+		Bind();
 
+		glGenRenderbuffers(1, &mDepthStencilRBO);
+		glBindRenderbuffer(GL_RENDERBUFFER, mDepthStencilRBO);
+		glRenderbufferStorage(GL_RENDERBUFFER, rboFormat, mWidth, mHeight);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachType, GL_RENDERBUFFER, mDepthStencilRBO);
+		
+		UnBind();
 	}
 
 	void FrameBuffer::Clear()

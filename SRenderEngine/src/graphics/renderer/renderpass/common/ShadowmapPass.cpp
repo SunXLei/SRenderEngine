@@ -19,9 +19,20 @@ namespace sre
 
 		// create framebuffer
 		mShadowmapFB = new FrameBuffer(SHADOWMAP_RESOLUTION_X, SHADOWMAP_RESOLUTION_Y);
-		mShadowmapFB->AddDepthStencilTexture(GL_DEPTH_COMPONENT32, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT);
-		mShadowmapFB->CreateFrameBuffer();
 
+		// create depth texture settings and add depth attachment to framebuffer
+		TextureSettings depthStencilTextureSettings;
+		depthStencilTextureSettings.TextureFormat = GL_DEPTH_COMPONENT32; // Only use depth, cause we don't need stencil in shadowmap pass.
+		depthStencilTextureSettings.TextureWrapSMode = GL_CLAMP_TO_BORDER;
+		depthStencilTextureSettings.TextureWrapTMode = GL_CLAMP_TO_BORDER;
+		depthStencilTextureSettings.TextureMagnificationFilterMode = GL_NEAREST;
+		depthStencilTextureSettings.TextureMinificationFilterMode = GL_NEAREST;
+		depthStencilTextureSettings.HasBorder = true;	// use default (1,1,1) border color
+		depthStencilTextureSettings.HasMips = false;
+		mShadowmapFB->AddDepthStencilTexture(depthStencilTextureSettings, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT);
+		
+		// This function can tell opengl set glDrawBuffer(GL_NONE) and glReadBuffer(GL_NONE) when we don't set color texture
+		mShadowmapFB->CreateFrameBuffer(); 
 	}
 	ShadowmapPass::~ShadowmapPass()
 	{
@@ -55,11 +66,10 @@ namespace sre
 		mScene->AddModelsToRender();
 
 		// set render modes
-		modelRenderer->SetupRenderState(); // We do not consider transpare or one face object now, assume it is all opaque.
+		modelRenderer->SetupRenderState(); // We do not consider transparent or one face objects now, assume all opaque objects.
 
 		// render
 		modelRenderer->Render(mShadowmapGenShader, false);
-
 
 		// renderpass output
 		ShadowmapPassOutput passOutput;

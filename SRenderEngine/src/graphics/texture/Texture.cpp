@@ -13,7 +13,8 @@ namespace sre
 
 	Texture::~Texture()
 	{
-		glDeleteTextures(1, &mTextureId);
+		if(mTextureId != 0)
+			glDeleteTextures(1, &mTextureId);
 	}
 
 	void Texture::Generate2DTexture(unsigned int width, unsigned int height, GLenum dataFormat, GLenum pixelDataType /*= GL_UNSIGNED_BYTE*/, const void *data /*= nullptr*/)

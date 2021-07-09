@@ -99,6 +99,12 @@
     <ClCompile Include="src\graphics\model\shapes\Quad.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\renderer\renderpass\deferred\DeferredGeometryPass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\test.vert" />
@@ -184,6 +190,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\model\shapes\Quad.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer\renderpass\deferred\DeferredGeometryPass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

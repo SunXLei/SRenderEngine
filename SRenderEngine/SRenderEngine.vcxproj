@@ -163,6 +163,8 @@
     <ClCompile Include="src\graphics\model\shapes\Quad.cpp" />
     <ClCompile Include="src\graphics\model\shapes\Sphere.cpp" />
     <ClCompile Include="src\graphics\renderer\ModelRenderer.cpp" />
+    <ClCompile Include="src\graphics\renderer\renderpass\deferred\DeferredGeometryPass.cpp" />
+    <ClCompile Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.cpp" />
     <ClCompile Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.cpp" />
     <ClCompile Include="src\graphics\renderer\renderpass\RenderPass.cpp" />
     <ClCompile Include="src\graphics\renderer\RenderPassManager.cpp" />
@@ -197,6 +199,8 @@
     <ClInclude Include="src\graphics\model\shapes\Quad.h" />
     <ClInclude Include="src\graphics\model\shapes\Sphere.h" />
     <ClInclude Include="src\graphics\renderer\ModelRenderer.h" />
+    <ClInclude Include="src\graphics\renderer\renderpass\deferred\DeferredGeometryPass.h" />
+    <ClInclude Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.h" />
     <ClInclude Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.h" />
     <ClInclude Include="src\graphics\renderer\renderpass\RenderPass.h" />
     <ClInclude Include="src\graphics\renderer\RenderPassManager.h" />

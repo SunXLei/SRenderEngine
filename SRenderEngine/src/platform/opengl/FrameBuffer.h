@@ -13,9 +13,9 @@ namespace sre
 		virtual ~FrameBuffer();
 
 		void CreateFrameBuffer();
-		void AddColorTexture(GLenum textureFormat, GLenum dataFormat, GLenum dataType, GLenum attachType);
-		void AddDepthStencilTexture(GLenum textureFormat, GLenum dataFormat, GLenum dataType, GLenum attachType);
-		void AddDepthStencilRBO(GLenum rboFormat);
+		void AddColorTexture(const TextureSettings& textureSettings, GLenum dataFormat, GLenum dataType, GLenum attachType);
+		void AddDepthStencilTexture(const TextureSettings& textureSettings, GLenum dataFormat, GLenum dataType, GLenum attachType);
+		void AddDepthStencilRBO(GLenum rboFormat, GLenum attachType);
 
 		void Clear();
 		void Bind();
@@ -30,12 +30,13 @@ namespace sre
 		inline Texture* GetColourTexture() { return &mColorTexture; }
 		inline Texture* GetDepthStencilTexture() { return &mDepthStencilTexture; }
 
-	private:
+	protected:
+		// framebuffer's property
 		unsigned int mFBO;
 		int mWidth, mHeight;
 		bool mIsMultiSample;
 
-
+		// default framebuffer's attachment
 		Texture mColorTexture;
 		Texture mDepthStencilTexture;
 		unsigned int mDepthStencilRBO;
