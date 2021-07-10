@@ -17,6 +17,9 @@ namespace sre
 		void AddDepthStencilTexture(const TextureSettings& textureSettings, GLenum dataFormat, GLenum dataType, GLenum attachType);
 		void AddDepthStencilRBO(GLenum rboFormat, GLenum attachType);
 
+		// When user changes the window size, we need to resize framebuffer too.
+		virtual void ResizeFrameBuffer(int width, int height);
+
 		void Clear();
 		void Bind();
 		void UnBind();
@@ -39,6 +42,8 @@ namespace sre
 		// default framebuffer's attachment
 		Texture mColorTexture;
 		Texture mDepthStencilTexture;
+
+		GLenum mRBOFormat;
 		unsigned int mDepthStencilRBO;
 		bool mIsUseRBO;
 	};

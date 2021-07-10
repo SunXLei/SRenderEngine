@@ -41,6 +41,8 @@ namespace sre
 		glGenTextures(1, &mTextureId);
 		bind();
 		glTexImage2D(GL_TEXTURE_2D, 0, mTextureSettings.TextureFormat, width, height, 0, dataFormat, pixelDataType, data);
+		mTextureSettings.dataFormat = dataFormat;
+		mTextureSettings.dataType = pixelDataType;
 		ApplyTextureSettings();
 		unbind();
 	}

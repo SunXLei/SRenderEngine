@@ -13,6 +13,9 @@ namespace sre
 		GBuffer(int width, int height);
 		~GBuffer();
 
+		virtual void ResizeFrameBuffer(int width, int height);
+
+
 		inline Texture* GetRenderTarget(int index) { return mRenderTargets[index]; }
 
 	private:

@@ -17,6 +17,38 @@ namespace sre
 			delete mRenderTargets[i];
 	}
 
+	void GBuffer::ResizeFrameBuffer(int width, int height)
+	{
+		mWidth = width;
+		mHeight = height;
+
+		// resize all 4 rendertargets
+		for (int i = 0; i < mRenderTargetsCount; i++)
+		{
+			Texture* current = mRenderTargets[i];
+			current->bind(0);
+			const TextureSettings& settings = current->GetTextureSettings();
+			glTexImage2D(current->GetTextureTarget(), 0, settings.TextureFormat, width, height, 0, settings.dataFormat, settings.dataType, nullptr);
+			current->unbind();
+		}
+
+
+		if (mDepthStencilTexture.IsGenerated())
+		{
+			mDepthStencilTexture.bind(0);
+			const TextureSettings& settings = mDepthStencilTexture.GetTextureSettings();
+			glTexImage2D(mDepthStencilTexture.GetTextureTarget(), 0, settings.TextureFormat, width, height, 0, settings.dataFormat, settings.dataType, nullptr);
+			mDepthStencilTexture.unbind();
+		}
+
+		if (mIsUseRBO)
+		{
+			glBindRenderbuffer(GL_RENDERBUFFER, mDepthStencilRBO);
+			glRenderbufferStorage(GL_RENDERBUFFER, mRBOFormat, mWidth, mHeight);
+			glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		}
+	}
+
 	void GBuffer::Init()
 	{	
 		// create depth texture settings and add depth attachment to framebuffer

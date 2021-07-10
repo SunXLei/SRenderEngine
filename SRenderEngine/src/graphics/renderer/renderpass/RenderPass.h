@@ -30,6 +30,7 @@ namespace sre
 		virtual ~RenderPass();
 
 		void DisplayTexture(int startx, int starty, int width, int height, Texture* texture,int displayChannel = 4, int unit = 9);
+		bool DetectWindowSizeChange(int framebufferWidth, int framebufferHeight);
 
 	protected:
 		Scene* mScene;

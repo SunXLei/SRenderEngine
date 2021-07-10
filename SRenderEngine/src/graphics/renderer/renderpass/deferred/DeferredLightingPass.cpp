@@ -39,6 +39,12 @@ namespace sre
 
 	LightingPassOutput DeferredLightingPass::Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput)
 	{
+		// detect window size change and resize it when necessary
+		if (DetectWindowSizeChange(mLightingFBO->GetWidth(), mLightingFBO->GetHeight()));
+			mLightingFBO->ResizeFrameBuffer(WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
+
+
+		// bind lighting framebuffer
 		mLightingFBO->Bind();
 		mLightingFBO->Clear();
 		glViewport(0, 0, mLightingFBO->GetWidth(), mLightingFBO->GetHeight());
@@ -71,9 +77,20 @@ namespace sre
 		mLightingShader->SetUniform("mixtureTexture", 7);
 
 		// draw
+		modelRenderer->SetupRenderState();
 		modelRenderer->NDC_Plane.Draw();
 
+		// reset depth test for debug texture showing
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
 		DisplayTexture(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight(), mLightingFBO->GetColourTexture(), 4, 8);
+		DisplayTexture(0, 0,   150, 150, gInput.outputGBuffer->GetRenderTarget(0), 4, 10);
+		DisplayTexture(150, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(1), 4, 11);
+		DisplayTexture(300, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(2), 4, 12);
+		DisplayTexture(450, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(3), 1, 13);
+		DisplayTexture(600, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(3), 2, 14);
+		DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
+		DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 1, 16);
 
 		return {mLightingFBO};
 	}

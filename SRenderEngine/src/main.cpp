@@ -35,7 +35,7 @@ int main()
 {
 	// Init
 	InputManager::Instance();
-	if (!WindowManager::Instance()->Init("SRenderEngine", 800, 600))
+	if (!WindowManager::Instance()->Init("SRenderEngine", 1200, 800))
 	{
 		std::cout << "Could not initialize window class!\n";
 		glfwTerminate();
@@ -63,7 +63,9 @@ int main()
 
 		// render
 		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		// TODO: If set glclearcolor to some "actual color", it will have some bugs in deferred renering because of the color buffer value
+		// So I leave it to black here, but it's more reasonable to use a stencil test to do deferred rendering.
+		// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		WindowManager::Instance()->Clear();
 		WindowManager::Instance()->Bind();
 		renderPassManager.Render();

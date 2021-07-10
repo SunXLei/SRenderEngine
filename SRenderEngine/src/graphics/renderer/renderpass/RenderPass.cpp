@@ -41,4 +41,12 @@ namespace sre
 		// draw ndc plane
 		mScene->GetModelRenderer()->NDC_Plane.Draw();
 	}
+
+	bool  RenderPass::DetectWindowSizeChange(int framebufferWidth, int framebufferHeight)
+	{
+		int windowWidth = WindowManager::Instance()->GetWidth();
+		int windowHeight = WindowManager::Instance()->GetHeight();
+
+		return (windowWidth != framebufferWidth || windowHeight != framebufferHeight);
+	}
 }

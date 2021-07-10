@@ -30,6 +30,9 @@ namespace sre
 		bool HasMips = true;
 		int MipBias = 0; // positive means blurrier texture selected, negative means sharper texture which can show texture aliasing
 
+		// Record data type for framebuffer resizing
+		GLenum dataFormat = GL_NONE;
+		GLenum dataType = GL_NONE;
 	};
 
 	class Texture

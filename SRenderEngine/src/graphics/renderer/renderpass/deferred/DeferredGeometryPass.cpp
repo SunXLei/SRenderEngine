@@ -1,5 +1,7 @@
 #include "./DeferredGeometryPass.h"
 
+#include <iostream>
+
 #include "./platform/window/WindowManager.h"
 
 namespace sre
@@ -25,6 +27,10 @@ namespace sre
 
 	GeometryPassOutput DeferredGeometryPass::Render()
 	{
+		// detect window size change and resize it when necessary
+		if (DetectWindowSizeChange(mGBuffer->GetWidth(), mGBuffer->GetHeight()));
+			mGBuffer->ResizeFrameBuffer(WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
+
 		// bind gbuffer framebuffer
 		mGBuffer->Bind();
 		mGBuffer->Clear();
@@ -50,13 +56,6 @@ namespace sre
 
 		// render
 		modelRenderer->Render(mGeometryShader, true);
-
-		DisplayTexture(0, 0, 100, 100, mGBuffer->GetRenderTarget(0), 4, 10);
-		DisplayTexture(100, 0, 100, 100, mGBuffer->GetRenderTarget(1), 4, 11);
-		DisplayTexture(200, 0, 100, 100, mGBuffer->GetRenderTarget(2), 4, 12);
-		DisplayTexture(300, 0, 100, 100, mGBuffer->GetRenderTarget(3), 1, 13);
-		DisplayTexture(400, 0, 100, 100, mGBuffer->GetRenderTarget(3), 2, 14);
-		DisplayTexture(500, 0, 100, 100, mGBuffer->GetRenderTarget(3), 3, 15);
 
 		return {mGBuffer};
 	}

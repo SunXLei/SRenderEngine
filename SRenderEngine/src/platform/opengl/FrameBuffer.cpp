@@ -86,6 +86,7 @@ namespace sre
 	// e.g.   GL_DEPTH24_STENCIL8  ,  GL_DEPTH_STENCIL_ATTACHMENT
 	void FrameBuffer::AddDepthStencilRBO(GLenum rboFormat, GLenum attachType)
 	{
+		mRBOFormat = rboFormat;
 		mIsUseRBO = true;
 		Bind();
 
@@ -95,6 +96,36 @@ namespace sre
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, attachType, GL_RENDERBUFFER, mDepthStencilRBO);
 		
 		UnBind();
+	}
+
+	//glTexImage2D(GL_TEXTURE_2D, 0, mTextureSettings.TextureFormat, width, height, 0, dataFormat, pixelDataType, data);
+	void FrameBuffer::ResizeFrameBuffer(int width, int height)
+	{
+		mWidth = width;
+		mHeight = height;
+
+		if (mColorTexture.IsGenerated())
+		{
+			mColorTexture.bind(0);
+			const TextureSettings& settings = mColorTexture.GetTextureSettings();
+			glTexImage2D(mColorTexture.GetTextureTarget(), 0, settings.TextureFormat, width, height, 0, settings.dataFormat, settings.dataType, nullptr);
+			mColorTexture.unbind();
+		}
+
+		if (mDepthStencilTexture.IsGenerated())
+		{
+			mDepthStencilTexture.bind(0);
+			const TextureSettings& settings = mDepthStencilTexture.GetTextureSettings();
+			glTexImage2D(mDepthStencilTexture.GetTextureTarget(), 0, settings.TextureFormat, width, height, 0, settings.dataFormat, settings.dataType, nullptr);
+			mDepthStencilTexture.unbind();
+		}
+
+		if (mIsUseRBO)
+		{
+			glBindRenderbuffer(GL_RENDERBUFFER, mDepthStencilRBO);
+			glRenderbufferStorage(GL_RENDERBUFFER, mRBOFormat, mWidth, mHeight);
+			glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		}
 	}
 
 	void FrameBuffer::Clear()
