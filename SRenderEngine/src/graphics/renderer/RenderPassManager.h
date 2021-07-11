@@ -5,6 +5,8 @@
 #include "./graphics/renderer/renderpass/foward/ForwardLightingPass.h"
 #include "./graphics/renderer/renderpass/deferred/DeferredGeometryPass.h"
 #include "./graphics/renderer/renderpass/deferred/DeferredLightingPass.h"
+#include "./graphics/renderer/renderpass/postprocess/SSRPass.h"
+#include "./graphics/renderer/renderpass/postprocess/PassThroughPass.h"
 
 namespace sre
 {
@@ -26,6 +28,8 @@ namespace sre
 		FowardLightingPass mFowardLightingPass;
 		DeferredGeometryPass mDeferredGeometryPass;
 		DeferredLightingPass mDeferredLightingPass;
+		SSRPass mSSRPass;
+		PassThroughPass mPS;
 	};
 
 }

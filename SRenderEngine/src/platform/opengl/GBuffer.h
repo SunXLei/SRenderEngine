@@ -13,6 +13,7 @@ namespace sre
 		GBuffer(int width, int height);
 		~GBuffer();
 
+		virtual void Clear();
 		virtual void ResizeFrameBuffer(int width, int height);
 
 

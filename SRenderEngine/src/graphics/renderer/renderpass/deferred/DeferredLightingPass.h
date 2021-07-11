@@ -13,7 +13,7 @@ namespace sre
 		DeferredLightingPass(Scene* scene);
 		~DeferredLightingPass();
 
-		LightingPassOutput Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput);
+		DeferredLightingPassOutput Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput);
 
 	private:
 		Shader* mLightingShader;

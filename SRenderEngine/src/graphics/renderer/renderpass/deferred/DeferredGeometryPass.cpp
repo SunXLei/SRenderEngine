@@ -28,7 +28,7 @@ namespace sre
 	GeometryPassOutput DeferredGeometryPass::Render()
 	{
 		// detect window size change and resize it when necessary
-		if (DetectWindowSizeChange(mGBuffer->GetWidth(), mGBuffer->GetHeight()));
+		if (DetectWindowSizeChange(mGBuffer->GetWidth(), mGBuffer->GetHeight()))
 			mGBuffer->ResizeFrameBuffer(WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
 
 		// bind gbuffer framebuffer
@@ -51,11 +51,22 @@ namespace sre
 		// add models to renderer
 		mScene->AddModelsToRender();
 
+
 		// set renderer modes
 		modelRenderer->SetupRenderState();
 
+		// enble stencil test
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0xFF);
+
+
 		// render
 		modelRenderer->Render(mGeometryShader, true);
+
+		 // disable stencil test
+		glDisable(GL_STENCIL_TEST);
 
 		return {mGBuffer};
 	}

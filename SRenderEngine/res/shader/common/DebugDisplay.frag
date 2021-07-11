@@ -16,4 +16,6 @@ void main()
         FragColor = vec4(texture(displayTexture, texCoords).bbb, 1.0f);
     else if(displayChannel == 4)
         FragColor = vec4(texture(displayTexture, texCoords).rgb, 1.0f);
+    else if(displayChannel == 5)
+        FragColor = vec4(texture(displayTexture, texCoords).aaa, 1.0f);
 }

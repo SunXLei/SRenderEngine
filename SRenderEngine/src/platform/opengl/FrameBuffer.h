@@ -20,7 +20,7 @@ namespace sre
 		// When user changes the window size, we need to resize framebuffer too.
 		virtual void ResizeFrameBuffer(int width, int height);
 
-		void Clear();
+		virtual void Clear();
 		void Bind();
 		void UnBind();
 

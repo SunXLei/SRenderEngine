@@ -167,6 +167,7 @@
     <ClCompile Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.cpp" />
     <ClCompile Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.cpp" />
     <ClCompile Include="src\graphics\renderer\renderpass\postprocess\PassThroughPass.cpp" />
+    <ClCompile Include="src\graphics\renderer\renderpass\postprocess\SSRPass.cpp" />
     <ClCompile Include="src\graphics\renderer\renderpass\RenderPass.cpp" />
     <ClCompile Include="src\graphics\renderer\RenderPassManager.cpp" />
     <ClCompile Include="src\graphics\renderer\renderpass\common\ShadowmapPass.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="src\graphics\renderer\renderpass\deferred\DeferredLightingPass.h" />
     <ClInclude Include="src\graphics\renderer\renderpass\foward\ForwardLightingPass.h" />
     <ClInclude Include="src\graphics\renderer\renderpass\postprocess\PassThroughPass.h" />
+    <ClInclude Include="src\graphics\renderer\renderpass\postprocess\SSRPass.h" />
     <ClInclude Include="src\graphics\renderer\renderpass\RenderPass.h" />
     <ClInclude Include="src\graphics\renderer\RenderPassManager.h" />
     <ClInclude Include="src\graphics\renderer\renderpass\common\ShadowmapPass.h" />

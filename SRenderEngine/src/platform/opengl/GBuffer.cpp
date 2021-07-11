@@ -17,6 +17,19 @@ namespace sre
 			delete mRenderTargets[i];
 	}
 
+	void GBuffer::Clear()
+	{
+		glm::vec4 positionClear(100000.0f);
+		glm::vec4 normalClear(0.0f);
+		glm::vec4 mixtureClear(0.0f);
+
+		glStencilMask(0xFF);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		glClearBufferfv(GL_COLOR, 1, &normalClear[0]);
+		glClearBufferfv(GL_COLOR, 2, &positionClear[0]);
+		glClearBufferfv(GL_COLOR, 3, &mixtureClear[0]);
+	}
+
 	void GBuffer::ResizeFrameBuffer(int width, int height)
 	{
 		mWidth = width;

@@ -178,6 +178,7 @@ void Shader::CompileShaderSource(const std::unordered_map<GLenum, std::string>& 
 		glCompileShader(shader);
 
 		// TODO:Change GL_ENUM type to string for error message
+		//std::cout << shaderSource << ": \n";
 		CheckCompileErrors(shader, "COMPILE");
 
 		glAttachShader(mShaderID, shader);
@@ -214,5 +215,6 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 				<< "\n -- --------------------------------------------------- -- " << std::endl;
 		}
 	}
+
 }
 

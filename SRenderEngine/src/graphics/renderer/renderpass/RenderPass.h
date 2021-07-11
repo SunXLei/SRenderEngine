@@ -17,9 +17,14 @@ namespace sre
 		GBuffer* outputGBuffer;
 	};
 
-	struct LightingPassOutput
+	struct DeferredLightingPassOutput
 	{
-		FrameBuffer* outputGBuffer;
+		FrameBuffer* deferredLightingFBO;
+	};
+
+	struct SSRPassOutput
+	{
+		FrameBuffer* ssrFBO;
 	};
 
 	// for now, the RenderPass class is a little bit dumb

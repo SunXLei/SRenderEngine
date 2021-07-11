@@ -26,7 +26,18 @@ namespace sre
 		colorTextureSettings.TextureMinificationFilterMode = GL_LINEAR;
 		colorTextureSettings.HasMips = false;
 		mLightingFBO->AddColorTexture(colorTextureSettings, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0);
-		mLightingFBO->AddDepthStencilRBO(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT);
+
+		TextureSettings depthStencilTextureSettings;
+		depthStencilTextureSettings.TextureFormat = GL_DEPTH24_STENCIL8;
+		depthStencilTextureSettings.TextureWrapSMode = GL_CLAMP_TO_BORDER;
+		depthStencilTextureSettings.TextureWrapTMode = GL_CLAMP_TO_BORDER;
+		depthStencilTextureSettings.TextureMagnificationFilterMode = GL_NEAREST;
+		depthStencilTextureSettings.TextureMinificationFilterMode = GL_NEAREST;
+		depthStencilTextureSettings.HasBorder = true;	// use default (1,1,1) border color
+		depthStencilTextureSettings.HasMips = false;
+		mLightingFBO->AddDepthStencilTexture(depthStencilTextureSettings, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, GL_DEPTH_STENCIL_ATTACHMENT);
+
+		//mLightingFBO->AddDepthStencilRBO(GL_DEPTH24_STENCIL8, GL_DEPTH_STENCIL_ATTACHMENT);
 		mLightingFBO->CreateFrameBuffer();
 
 	}
@@ -37,17 +48,27 @@ namespace sre
 		delete mLightingShader;
 	}
 
-	LightingPassOutput DeferredLightingPass::Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput)
-	{
-		// detect window size change and resize it when necessary
-		if (DetectWindowSizeChange(mLightingFBO->GetWidth(), mLightingFBO->GetHeight()));
-			mLightingFBO->ResizeFrameBuffer(WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
+	DeferredLightingPassOutput DeferredLightingPass::Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput)
+	{		
+		// disable depth and multisample
+		glDisable(GL_DEPTH_TEST);
+		glDisable(GL_MULTISAMPLE);
 
+		// detect window size change and resize it when necessary
+		if (DetectWindowSizeChange(mLightingFBO->GetWidth(), mLightingFBO->GetHeight()))
+			mLightingFBO->ResizeFrameBuffer(WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
 
 		// bind lighting framebuffer
 		mLightingFBO->Bind();
 		mLightingFBO->Clear();
 		glViewport(0, 0, mLightingFBO->GetWidth(), mLightingFBO->GetHeight());
+
+		// Move the depth + stencil of the GBuffer to the our framebuffer
+		// NOTE: Framebuffers have to have identical depth + stencil formats for this to work
+		// NOTE: after the blit we still bind the mLightingFBO as DRAW_FBO
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, gInput.outputGBuffer->GetFramebuffer());
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mLightingFBO->GetFramebuffer());
+		glBlitFramebuffer(0, 0, gInput.outputGBuffer->GetWidth(), gInput.outputGBuffer->GetHeight(), 0, 0, mLightingFBO->GetWidth(), mLightingFBO->GetHeight(), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 
 		// setup
 		ModelRenderer* modelRenderer = mScene->GetModelRenderer();
@@ -76,21 +97,34 @@ namespace sre
 		gInput.outputGBuffer->GetRenderTarget(3)->bind(7);
 		mLightingShader->SetUniform("mixtureTexture", 7);
 
+
+		// enble stencil test
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		glStencilFunc(GL_EQUAL, 1, 0xFF);
+		glStencilMask(0x00);
+
 		// draw
-		modelRenderer->SetupRenderState();
 		modelRenderer->NDC_Plane.Draw();
 
-		// reset depth test for debug texture showing
+		// disable stencil test
+		glDisable(GL_STENCIL_TEST);
+
+
+
+
+		// debug display
+		//DisplayTexture(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight(), mLightingFBO->GetColourTexture(), 4, 8);
+		//DisplayTexture(0, 0,   150, 150, gInput.outputGBuffer->GetRenderTarget(0), 4, 10);
+		//DisplayTexture(150, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(1), 4, 11);
+		//DisplayTexture(300, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(2), 4, 12);
+		//DisplayTexture(450, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(3), 1, 13);
+		//DisplayTexture(600, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(3), 2, 14);
+		//DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
+		//DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 5, 16);
+
+		// reset depth test 
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
-		DisplayTexture(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight(), mLightingFBO->GetColourTexture(), 4, 8);
-		DisplayTexture(0, 0,   150, 150, gInput.outputGBuffer->GetRenderTarget(0), 4, 10);
-		DisplayTexture(150, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(1), 4, 11);
-		DisplayTexture(300, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(2), 4, 12);
-		DisplayTexture(450, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(3), 1, 13);
-		DisplayTexture(600, 0,  150, 150,gInput.outputGBuffer->GetRenderTarget(3), 2, 14);
-		DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
-		DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 1, 16);
 
 		return {mLightingFBO};
 	}

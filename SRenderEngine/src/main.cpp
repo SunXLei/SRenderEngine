@@ -65,7 +65,9 @@ int main()
 		// ------
 		// TODO: If set glclearcolor to some "actual color", it will have some bugs in deferred renering because of the color buffer value
 		// So I leave it to black here, but it's more reasonable to use a stencil test to do deferred rendering.
-		// glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearDepth(100000.0);
+		glClearStencil(0);
 		WindowManager::Instance()->Clear();
 		WindowManager::Instance()->Bind();
 		renderPassManager.Render();
