@@ -48,7 +48,7 @@ namespace sre
 	void LightManager::InitBasicLights()
 	{
 		// Setup some lights for the scene
-		DirectionalLight directionalLight1(2.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, -0.3f));
+		DirectionalLight directionalLight1(2.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.5f, 1.0f, -0.2f));
 		AddDirectionalLight(directionalLight1);
 
 		//SpotLight spotlight1(100.0f, glm::vec3(1.0f, 1.0f, 1.0f), 50.0f, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(15.0f)));

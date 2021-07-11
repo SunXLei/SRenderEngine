@@ -138,11 +138,14 @@ namespace sre
 		{
 			aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-			// Attempt to load the materials if they can be found. However PBR materials will need to be manually configured since Assimp doesn't support them
-			// Only colour data for the renderer is considered sRGB, all other type of non-colour texture data shouldn't be corrected by the hardware
+			// This set is only work for my sponza mtl file. be careful!
 			newMesh.mMaterial.SetAlbedoMap(LoadMaterialTexture(material, aiTextureType_DIFFUSE, true));
 			newMesh.mMaterial.SetNormalMap(LoadMaterialTexture(material, aiTextureType_NORMALS, false));
 			newMesh.mMaterial.SetAmbientOcclusionMap(LoadMaterialTexture(material, aiTextureType_AMBIENT, false));
+			newMesh.mMaterial.SetMetallicMap(LoadMaterialTexture(material, aiTextureType_SPECULAR, false));
+			newMesh.mMaterial.SetRoughnessMap(LoadMaterialTexture(material, aiTextureType_SHININESS, false));
+			//newMesh.mMaterial.SetAmbientOcclusionMap(LoadMaterialTexture(material, aiTextureType_AMBIENT, false));
+
 		}
 
 		return newMesh;
@@ -169,10 +172,8 @@ namespace sre
 			TextureSettings textureSettings;
 			textureSettings.IsSRGB = isSRGB;
 
-			std::cout << fileToSearch << "\n";
 			for (auto &c : fileToSearch)
 				if (c == '\\') c = '/';
-			std::cout << fileToSearch << "\n";
 			return TextureLoader::Load2DTexture(fileToSearch, &textureSettings);
 		}
 

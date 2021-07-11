@@ -44,10 +44,12 @@ namespace sre
 		Model *cube2 = new Model(Cube());
 		Model *cube3 = new Model(Cube());
 		Model* gun = new Model("res/cerberus/meshes/cerberus.obj");
-		mModels.push_back(cube1);
+		Model* sponza = new Model("res/sponza/sponza.obj");
+		//mModels.push_back(cube1);
 		mModels.push_back(cube2);
 		mModels.push_back(cube3);
 		mModels.push_back(gun);
+		mModels.push_back(sponza);
 		//Model* sphere1 = new Model(Sphere());
 		//Model* sphere2 = new Model(Sphere());
 		//mModels.push_back(sphere1);
@@ -59,8 +61,9 @@ namespace sre
 		cube2->SetScale(glm::vec3(30.0f, 1.0f, 30.0f));
 		cube3->SetPosition(glm::vec3(1.0f, 3.0f, 3.0f));
 		cube3->SetScale(glm::vec3(2.0f, 2.0f, 2.0f));
-		gun->SetPosition(glm::vec3(3.0f, -0.5f, 0.0f));
+		gun->SetPosition(glm::vec3(2.0f, 0.5f, 0.0f));
 		gun->SetScale(glm::vec3(5.0f, 5.0f, 5.0f));
+		sponza->SetScale(glm::vec3(0.03f, 0.03f, 0.03f));
 
 		TextureSettings srgbTextureSettings;
 		srgbTextureSettings.IsSRGB = true;

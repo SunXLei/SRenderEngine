@@ -129,7 +129,8 @@ vec3 CalculateDirectionalLightRadiance(vec3 albedo, vec3 normal, float metallic,
 
 		// take care shadow
 		float shadow = ShadowCalculation(fragPosLightSpace, normal, lightDir); 
-		directLightRadiance += (diffuse + specular) * radiance * NdotL * (1 - shadow);
+//		directLightRadiance += (diffuse + specular) * radiance * NdotL * (1 - shadow);
+		directLightRadiance += (diffuse + specular) * radiance * NdotL ;
 	}
 
 	return directLightRadiance;

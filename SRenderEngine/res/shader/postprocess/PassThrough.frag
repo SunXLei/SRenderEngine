@@ -19,7 +19,7 @@ void main()
 	// if(luminance > 0.3) factor = 1;
 	// else factor = 0.2; 
 
-	vec3 color = vec3(baseColor + ssrColor).rgb;
+	vec3 color = vec3(baseColor + 0.8 * ssrColor).rgb;
 	
 	FinalColor = vec4(color, 1.0f);
 }
