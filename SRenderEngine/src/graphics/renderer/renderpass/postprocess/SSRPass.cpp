@@ -58,7 +58,6 @@ namespace sre
 		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, mSSRFBO->GetFramebuffer());
 		glBlitFramebuffer(0, 0, gInput.outputGBuffer->GetWidth(), gInput.outputGBuffer->GetHeight(), 0, 0, mSSRFBO->GetWidth(), mSSRFBO->GetHeight(), GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 
-
 		// setup
 		ModelRenderer* modelRenderer = mScene->GetModelRenderer();
 		Camera* camera = mScene->GetCamera();
@@ -93,7 +92,9 @@ namespace sre
 		// draw
 		modelRenderer->NDC_Plane.Draw();
 
+		// disable stencil test and reset depth test 
 		glDisable(GL_STENCIL_TEST);
+		glEnable(GL_DEPTH_TEST);
 
 
 		return {mSSRFBO};

@@ -14,12 +14,9 @@ void main()
 	vec4 baseColor = texture(colorTexture, texCoord);
 	vec4 ssrColor = texture(ssrTexture,texCoord);
 
-	float luminance = (ssrColor.r + ssrColor.g + ssrColor.b)/3.0;
-	float factor = 1;
-	// if(luminance > 0.3) factor = 1;
-	// else factor = 0.2; 
 
-	vec3 color = vec3(baseColor + 0.8 * ssrColor).rgb;
+
+	vec3 color = vec3(baseColor).rgb;
 	
 	FinalColor = vec4(color, 1.0f);
 }

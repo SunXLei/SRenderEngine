@@ -35,7 +35,7 @@ int main()
 {
 	// Init
 	InputManager::Instance();
-	if (!WindowManager::Instance()->Init("SRenderEngine", 1200, 800))
+	if (!WindowManager::Instance()->Init("SRenderEngine", 800, 600))
 	{
 		std::cout << "Could not initialize window class!\n";
 		glfwTerminate();
@@ -76,6 +76,8 @@ int main()
 		// swap buffers and poll IO events
 		// -------------------------------
 		WindowManager::Instance()->Update();
+		//std::cout << scene.GetCamera()->GetPosition()[0] <<" "<< scene.GetCamera()->GetPosition()[1]
+		//	<< " " << scene.GetCamera()->GetPosition()[2] << "\n";
 	}
 
 	glfwTerminate();

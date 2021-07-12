@@ -51,7 +51,6 @@ namespace sre
 		// add models to renderer
 		mScene->AddModelsToRender();
 
-
 		// set renderer modes
 		modelRenderer->SetupRenderState();
 
@@ -60,7 +59,6 @@ namespace sre
 		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		glStencilFunc(GL_ALWAYS, 1, 0xFF);
 		glStencilMask(0xFF);
-
 
 		// render
 		modelRenderer->Render(mGeometryShader, true);

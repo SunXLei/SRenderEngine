@@ -28,9 +28,9 @@ struct SpotLight
 	float outerCutOff;
 };
 
-#define MAX_DIR_LIGHTS 5
-#define MAX_POINT_LIGHTS 5
-#define MAX_SPOT_LIGHTS 5
+#define MAX_DIR_LIGHTS 10
+#define MAX_POINT_LIGHTS 10
+#define MAX_SPOT_LIGHTS 10
 const float PI = 3.14159265359;
 
 // input and output
@@ -58,9 +58,9 @@ uniform mat4 lightSpaceMatrix;
 
 // Light radiance calculations
 vec3 CalculateDirectionalLightRadiance(vec3 albedo, vec3 normal, float metallic, 
-float roughness, vec3 fragToView, vec3 baseReflectivity, vec4 fragPosLightSpace);
-vec3 CalculatePointLightRadiance(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 fragToView, vec3 baseReflectivity);
-vec3 CalculateSpotLightRadiance(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 fragToView, vec3 baseReflectivity);
+float roughness, vec3 fragToView, vec3 F0, vec4 fragPosLightSpace);
+vec3 CalculatePointLightRadiance(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 fragPos, vec3 fragToView, vec3 F0);
+vec3 CalculateSpotLightRadiance(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 fragPos, vec3 fragToView, vec3 F0);
 
 // Cook-Torrance BRDF functions adopted by Epic for UE4
 float NormalDistributionGGX(vec3 normal, vec3 halfway, float roughness) ;
@@ -91,9 +91,12 @@ void main()
 
 	// calculate direct radiance
 	vec3 directLightRadiance = vec3(0.0);
+	vec3 directPointLightRadiance = vec3(0.0);
 
-	// only support one directional light and it's shadow now
+	// only support one directional light shadow now
 	directLightRadiance += CalculateDirectionalLightRadiance(albedo,normal,metallic,roughness,fragToView,F0,fragPosLightSpace);
+	directLightRadiance += CalculatePointLightRadiance(albedo,normal,metallic,roughness,fragPos, fragToView,F0);
+	directLightRadiance += CalculateSpotLightRadiance(albedo,normal,metallic,roughness,fragPos, fragToView,F0);
 	
 	vec3 color = ACESTonemapping(directLightRadiance);
 	color = pow(color, vec3(1.0f/2.2f));
@@ -129,13 +132,99 @@ vec3 CalculateDirectionalLightRadiance(vec3 albedo, vec3 normal, float metallic,
 
 		// take care shadow
 		float shadow = ShadowCalculation(fragPosLightSpace, normal, lightDir); 
-//		directLightRadiance += (diffuse + specular) * radiance * NdotL * (1 - shadow);
-		directLightRadiance += (diffuse + specular) * radiance * NdotL ;
+		directLightRadiance += (diffuse + specular) * radiance * NdotL * (1 - shadow);
 	}
 
 	return directLightRadiance;
 }
 
+vec3 CalculatePointLightRadiance(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 fragPos, vec3 fragToView, vec3 F0)
+{
+	vec3 pointLightIrradiance = vec3(0.0);
+	for (int i = 0; i < numDirPointSpotLights.y; ++i) 
+	{
+		vec3 fragToLight = normalize(pointLights[i].position - fragPos);
+		vec3 halfway = normalize(fragToView + fragToLight);
+		float fragToLightDistance = length(pointLights[i].position - fragPos);
+
+		// Attenuation calculation (based on Epic's UE4 falloff model)
+		float d = fragToLightDistance / pointLights[i].attenuationRadius;
+		float d2 = d * d;
+		float d4 = d2 * d2;
+		float falloffNumerator = clamp(1.0 - d4, 0.0, 1.0);
+		float attenuation = (falloffNumerator * falloffNumerator) / ((fragToLightDistance * fragToLightDistance) + 1.0);
+		vec3 radiance = pointLights[i].intensity * pointLights[i].lightColor * attenuation;
+		
+		// Cook-Torrance Specular BRDF calculations
+		// specular
+		float NdotL = max(dot(normal, fragToLight), 0.0f);
+		float NdotV = max(dot(normal, fragToView), 0.0f);
+		float HdotV = max(dot(halfway, fragToView), 0.0f);
+
+		vec3 F = FresnelSchlick(HdotV, F0);
+		float D = NormalDistributionGGX(normal, halfway, roughness);
+		float G = GeometrySmith(roughness, NdotL, NdotV);
+		vec3 numerator = F * D * G;
+		float denominator = max(4 * NdotL * NdotV, 0.0f) + 0.001f;
+		vec3 specular = numerator / denominator;
+
+		// diffuse
+		vec3 kD = (1.0f - F0) * (1 - metallic);
+		vec3 diffuse = kD * albedo / PI;
+
+		// Add the light's radiance to the irradiance sum
+		pointLightIrradiance += (diffuse + specular) * radiance * NdotL;
+	}
+
+	return pointLightIrradiance;
+}
+
+
+vec3 CalculateSpotLightRadiance(vec3 albedo, vec3 normal, float metallic, float roughness, vec3 fragPos, vec3 fragToView, vec3 F0)
+{
+	vec3 spotLightIrradiance = vec3(0.0);
+	for (int i = 0; i < numDirPointSpotLights.z; ++i) 
+	{
+		vec3 fragToLight = normalize(spotLights[i].position - fragPos);
+		vec3 halfway = normalize(fragToView + fragToLight);
+		float fragToLightDistance = length(spotLights[i].position - fragPos);
+
+		// Attenuation calculation (based on Epic's UE4 falloff model)
+		float d = fragToLightDistance / spotLights[i].attenuationRadius;
+		float d2 = d * d;
+		float d4 = d2 * d2;
+		float falloffNumerator = clamp(1.0 - d4, 0.0, 1.0);
+
+		// Check if it is in the spotlight's circle
+		float theta = dot(normalize(spotLights[i].direction), -fragToLight);
+		float difference = spotLights[i].innerCutOff - spotLights[i].outerCutOff;
+		float intensity = clamp((theta - spotLights[i].outerCutOff) / difference, 0.0, 1.0);
+		float attenuation = intensity * (falloffNumerator * falloffNumerator) / ((fragToLightDistance * fragToLightDistance) + 1.0);
+		vec3 radiance = spotLights[i].intensity * spotLights[i].lightColor * attenuation;
+
+		// Cook-Torrance Specular BRDF calculations
+		// specular
+		float NdotL = max(dot(normal, fragToLight), 0.0f);
+		float NdotV = max(dot(normal, fragToView), 0.0f);
+		float HdotV = max(dot(halfway, fragToView), 0.0f);
+
+		vec3 F = FresnelSchlick(HdotV, F0);
+		float D = NormalDistributionGGX(normal, halfway, roughness);
+		float G = GeometrySmith(roughness, NdotL, NdotV);
+		vec3 numerator = F * D * G;
+		float denominator = max(4 * NdotL * NdotV, 0.0f) + 0.001f;
+		vec3 specular = numerator / denominator;
+
+		// diffuse
+		vec3 kD = (1.0f - F0) * (1 - metallic);
+		vec3 diffuse = kD * albedo / PI;
+
+		// Add the light's radiance to the irradiance sum
+		spotLightIrradiance += (diffuse + specular) * radiance * NdotL;
+	}
+
+	return spotLightIrradiance;
+}
 
 // Approximates the amount of microfacets that are properly aligned with the halfway vector, thus determines the strength and area for specular light
 float NormalDistributionGGX(vec3 normal, vec3 halfway, float roughness) 

@@ -77,6 +77,7 @@ namespace sre
 		glBindTexture(mTextureTarget, mTextureId);
 	}
 
+
 	void Texture::unbind()
 	{
 		glBindTexture(mTextureTarget, 0);

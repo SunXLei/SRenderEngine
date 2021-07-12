@@ -15,7 +15,7 @@ namespace sre
 	{
 		shader->SetUniform(("pointLights[" + std::to_string(currentLightIndex) + "].position").c_str(), mLightPos);
 		shader->SetUniform(("pointLights[" + std::to_string(currentLightIndex) + "].intensity").c_str(), mIntensity);
-		shader->SetUniform(("pointLights[" + std::to_string(currentLightIndex) + "].lightColour").c_str(), mLightColor);
+		shader->SetUniform(("pointLights[" + std::to_string(currentLightIndex) + "].lightColor").c_str(), mLightColor);
 		shader->SetUniform(("pointLights[" + std::to_string(currentLightIndex) + "].attenuationRadius").c_str(), mAttenuationRadius);
 	}
 

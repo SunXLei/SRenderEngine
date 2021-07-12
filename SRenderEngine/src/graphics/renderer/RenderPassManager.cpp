@@ -28,6 +28,6 @@ namespace sre
 		
 		SSRPassOutput ssrOutput =  mSSRPass.Render(gOutput, lightOutput);
 		
-		mPS.Render(gOutput, ssrOutput, lightOutput);
+		mPS.Render(gOutput, lightOutput,ssrOutput);
 	}
 }

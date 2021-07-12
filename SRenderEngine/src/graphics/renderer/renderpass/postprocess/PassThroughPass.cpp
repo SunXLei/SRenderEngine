@@ -20,7 +20,7 @@ namespace sre
 		delete mPassThroughShader;
 	}
 
-	void PassThroughPass::Render(GeometryPassOutput gInput, SSRPassOutput ssrInput, DeferredLightingPassOutput dlightInput)
+	void PassThroughPass::Render(GeometryPassOutput gInput, DeferredLightingPassOutput dlightInput, SSRPassOutput ssrInput /*= {nullptr}*/)
 	{
 		glDisable(GL_DEPTH_TEST);
 
@@ -37,16 +37,16 @@ namespace sre
 		mPassThroughShader->Bind();
 
 		// set ssr and deferred lighting
-		ssrInput.ssrFBO->GetColourTexture()->bind(6);
-		mPassThroughShader->SetUniform("ssrTexture", 6);
+		if (ssrInput.ssrFBO != nullptr)
+		{
+			ssrInput.ssrFBO->GetColourTexture()->bind(6);
+			mPassThroughShader->SetUniform("ssrTexture", 6);
+		}
 		dlightInput.deferredLightingFBO->GetColourTexture()->bind(7);
 		mPassThroughShader->SetUniform("colorTexture", 7);
 
 
 		modelRenderer->NDC_Plane.Draw();
-
-
-
 
 		//DisplayTexture(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight(), mSSRFBO->GetColourTexture(), 4, 8);
 		DisplayTexture(0, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(0), 4, 10);
@@ -54,8 +54,8 @@ namespace sre
 		DisplayTexture(300, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(2), 4, 12);
 		DisplayTexture(450, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 1, 13);
 		DisplayTexture(600, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 2, 14);
-		DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
-		DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 1, 16);
+		//DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
+		//DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 1, 16);
 
 		glEnable(GL_DEPTH_TEST);
 	}

@@ -15,7 +15,6 @@ namespace sre
 
 		// create FBO
 		mLightingFBO = new FrameBuffer(WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight());
-		
 
 		// add attachment and check whether success by call CreateFrameBuffer
 		TextureSettings colorTextureSettings;
@@ -98,7 +97,7 @@ namespace sre
 		mLightingShader->SetUniform("mixtureTexture", 7);
 
 
-		// enble stencil test
+		// enble stencil test for discarding unnecessary fragment shader
 		glEnable(GL_STENCIL_TEST);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 		glStencilFunc(GL_EQUAL, 1, 0xFF);
@@ -106,12 +105,6 @@ namespace sre
 
 		// draw
 		modelRenderer->NDC_Plane.Draw();
-
-		// disable stencil test
-		glDisable(GL_STENCIL_TEST);
-
-
-
 
 		// debug display
 		//DisplayTexture(0, 0, WindowManager::Instance()->GetWidth(), WindowManager::Instance()->GetHeight(), mLightingFBO->GetColourTexture(), 4, 8);
@@ -123,7 +116,8 @@ namespace sre
 		//DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
 		//DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 5, 16);
 
-		// reset depth test 
+		// disable stencil test and reset depth test 
+		glDisable(GL_STENCIL_TEST);
 		glEnable(GL_DEPTH_TEST);
 
 		return {mLightingFBO};
