@@ -20,7 +20,7 @@ namespace sre
 		delete mPassThroughShader;
 	}
 
-	void PassThroughPass::Render(GeometryPassOutput gInput, DeferredLightingPassOutput dlightInput, SSRPassOutput ssrInput /*= {nullptr}*/)
+	void PassThroughPass::Render(GeometryPassOutput gInput, FrameBuffer* colorFBO, SSRPassOutput ssrInput /*= {nullptr}*/)
 	{
 		glDisable(GL_DEPTH_TEST);
 
@@ -42,7 +42,7 @@ namespace sre
 			ssrInput.ssrFBO->GetColourTexture()->bind(6);
 			mPassThroughShader->SetUniform("ssrTexture", 6);
 		}
-		dlightInput.deferredLightingFBO->GetColourTexture()->bind(7);
+		colorFBO->GetColourTexture()->bind(7);
 		mPassThroughShader->SetUniform("colorTexture", 7);
 
 

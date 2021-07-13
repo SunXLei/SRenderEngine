@@ -35,8 +35,19 @@ namespace sre
 	{
 		for (unsigned int i = 0; i < mMeshes.size(); ++i) 
 		{
-			if(isUseMaterial)
+			if (isUseMaterial)
+			{
 				mMeshes[i].mMaterial.BindMaterial(shader);
+
+				// check whether to use normal mapping
+				if (mMeshes[i].HasTangents())
+					shader->SetUniform("useNormalMapping", 1);
+				else
+					shader->SetUniform("useNormalMapping", 0);
+			}
+
+			
+
 			mMeshes[i].Draw();
 		}
 	}

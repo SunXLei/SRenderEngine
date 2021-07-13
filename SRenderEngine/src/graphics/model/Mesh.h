@@ -21,7 +21,9 @@ namespace sre
 
 		void Draw() const;
 
-		inline Material* GetMaterial() { return &mMaterial; }
+		inline bool HasTangents() const { return mTangents.size() > 0; }
+
+		inline Material* GetMaterial()  { return &mMaterial; }
 
 	protected:
 		void SetupMesh(bool interleaved = true);

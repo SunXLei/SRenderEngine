@@ -21,6 +21,7 @@ layout (location = 2) out vec3 gb_Pos;
 layout (location = 3) out vec3 gb_Mixture;
 
 uniform Material material;
+uniform int useNormalMapping;
 
 void main()
 {
@@ -28,6 +29,9 @@ void main()
 	vec3 normal = texture(material.texture_normal, texCoords).rgb;
 	normal = normal * 2.0f - 1.0f;
 	normal = normalize(TBN * normal);
+	if(useNormalMapping == 0)
+		normal = baseNormal; 
+
 	float metallic = texture(material.texture_metallic, texCoords).r;
 	float roughness = texture(material.texture_roughness, texCoords).r;
 	float ao = texture(material.texture_ao, texCoords).r;

@@ -13,7 +13,7 @@ namespace sre
 		SSRPass(Scene* scene);
 		~SSRPass();
 
-		SSRPassOutput Render(GeometryPassOutput gInput, DeferredLightingPassOutput dlightInput);
+		SSRPassOutput Render(GeometryPassOutput gInput, LightingPassOutput dlightInput);
 
 	private:
 		Shader* mSSRShader;

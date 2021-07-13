@@ -17,9 +17,14 @@ namespace sre
 		GBuffer* outputGBuffer;
 	};
 
-	struct DeferredLightingPassOutput
+	struct LightingPassOutput
 	{
-		FrameBuffer* deferredLightingFBO;
+		FrameBuffer* fbo;
+	};
+
+	struct PostProcessOutput
+	{
+		FrameBuffer* fbo;
 	};
 
 	struct SSRPassOutput

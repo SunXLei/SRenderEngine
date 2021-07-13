@@ -47,7 +47,7 @@ namespace sre
 		delete mLightingShader;
 	}
 
-	DeferredLightingPassOutput DeferredLightingPass::Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput)
+	LightingPassOutput DeferredLightingPass::Render(GeometryPassOutput gInput, ShadowmapPassOutput smInput)
 	{		
 		// disable depth and multisample
 		glDisable(GL_DEPTH_TEST);

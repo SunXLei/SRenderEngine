@@ -20,6 +20,13 @@ namespace sre
 		inline void SetRoughnessMap(Texture *texture) { mRoughnessMap = texture; }
 		inline void SetAmbientOcclusionMap(Texture *texture) { mAOMap = texture; }
 
+		//inline void ResetAlbedoMap(Texture* texture) { mAlbedoMap = texture; }
+		//inline void ResetNormalMap(Texture* texture) { mNormalMap = texture; }
+		//inline void ResetMetallicMap(Texture* texture) { mMetallicMap = texture; }
+		//inline void ResetRoughnessMap(Texture* texture) { mRoughnessMap = texture; }
+		//inline void ResetAmbientOcclusionMap(Texture* texture) { mAOMap = texture; }
+
+
 	private:
 		// TODO: remember to release this texture inside or outside
 		Texture *mAlbedoMap;

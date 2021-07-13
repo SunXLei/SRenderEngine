@@ -1,5 +1,7 @@
 #include "./Scene.h"
 
+#include <iostream>
+
 #include "./graphics/texture/TextureLoader.h"
 #include "./graphics/model/shapes/Cube.h"
 #include "./graphics/model/shapes/Sphere.h"
@@ -45,17 +47,17 @@ namespace sre
 		Model* sphere1 = new Model(Sphere());
 		Model* gun = new Model("res/cerberus/meshes/cerberus.obj");
 		Model* sponza = new Model("res/sponza/sponza.obj");
+		mModels.push_back(sphere1);
 		mModels.push_back(cube1);
 		mModels.push_back(cube2);
 		mModels.push_back(cube3);
 		mModels.push_back(gun);
 		mModels.push_back(sponza);
-		//mModels.push_back(sphere1);
 		//Model* sphere1 = new Model(Sphere());
 		//Model* sphere2 = new Model(Sphere());
 		//mModels.push_back(sphere1);
 		//mModels.push_back(sphere2);
-		sphere1->SetPosition(glm::vec3(7.0, 3.0f, -49.0f));
+		sphere1->SetPosition(glm::vec3(0.0, 3.0f, 0.0f));
 		cube1->SetPosition(glm::vec3(7.0, 3.0f, -49.0f));
 		//cube1->SetScale(glm::vec3(2.0f, 2.0f, 2.0f));
 		cube2->SetPosition(glm::vec3(0.0f, -2.0f, 0.0f));
@@ -69,6 +71,7 @@ namespace sre
 
 		TextureSettings srgbTextureSettings;
 		srgbTextureSettings.IsSRGB = true; 
+		//dragon->GetMesh(0)->GetMaterial()->SetAlbedoMap(TextureLoader::Load2DTexture("res/texture/wood.png", &srgbTextureSettings));
 		sphere1->GetMesh(0)->GetMaterial()->SetAlbedoMap(TextureLoader::Load2DTexture("res/texture/wood.png", &srgbTextureSettings));
 		cube1->GetMesh(0)->GetMaterial()->SetAlbedoMap(TextureLoader::Load2DTexture("res/texture/wood.png", &srgbTextureSettings));
 		cube2->GetMesh(0)->GetMaterial()->SetAlbedoMap(TextureLoader::Load2DTexture("res/texture/white.png", &srgbTextureSettings));
@@ -78,8 +81,6 @@ namespace sre
 		gun->GetMesh(0)->GetMaterial()->SetRoughnessMap(TextureLoader::Load2DTexture("res/cerberus/materials/cerberus_rough.png"));
 		gun->GetMesh(0)->GetMaterial()->SetMetallicMap(TextureLoader::Load2DTexture("res/cerberus/materials/cerberus_metal.png"));
 		gun->GetMesh(0)->GetMaterial()->SetAmbientOcclusionMap(TextureLoader::Load2DTexture("res/cerberus/materials/cerberus_ao.png"));
-
-
 
 
 

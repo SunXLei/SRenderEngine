@@ -13,7 +13,7 @@ namespace sre
 		PassThroughPass(Scene* scene);
 		~PassThroughPass();
 
-		void Render(GeometryPassOutput gInput,DeferredLightingPassOutput dlightInput, SSRPassOutput ssrInput = { nullptr });
+		void Render(GeometryPassOutput gInput, FrameBuffer* colorFBO, SSRPassOutput ssrInput = { nullptr });
 
 	private:
 		Shader* mPassThroughShader;

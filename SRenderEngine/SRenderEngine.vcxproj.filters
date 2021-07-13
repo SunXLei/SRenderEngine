@@ -111,6 +111,9 @@
     <ClCompile Include="src\graphics\renderer\renderpass\postprocess\SSRPass.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\graphics\renderer\renderpass\postprocess\FXAAPass.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shader\test.vert" />
@@ -208,6 +211,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\graphics\renderer\renderpass\postprocess\SSRPass.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\graphics\renderer\renderpass\postprocess\FXAAPass.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

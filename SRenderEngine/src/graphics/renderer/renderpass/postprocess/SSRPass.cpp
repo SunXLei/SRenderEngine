@@ -36,7 +36,7 @@ namespace sre
 		delete mSSRShader;
 	}
 
-	SSRPassOutput SSRPass::Render(GeometryPassOutput gInput, DeferredLightingPassOutput dlightInput)
+	SSRPassOutput SSRPass::Render(GeometryPassOutput gInput, LightingPassOutput dlightInput)
 	{
 		// disable depth and multisample
 		glDisable(GL_DEPTH_TEST);
@@ -80,7 +80,7 @@ namespace sre
 		mSSRShader->SetUniform("positionTexture", 5);
 		gInput.outputGBuffer->GetRenderTarget(3)->bind(6);
 		mSSRShader->SetUniform("mixtureTexture", 6);
-		dlightInput.deferredLightingFBO->GetColourTexture()->bind(7);
+		dlightInput.fbo->GetColourTexture()->bind(7);
 		mSSRShader->SetUniform("colorTexture", 7);
 
 		// enble stencil test

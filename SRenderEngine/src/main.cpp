@@ -1,8 +1,6 @@
-
 #include <iostream>
 #include <unordered_map>
-
-#include "./graphics/Shader.h"
+#include <ctime>
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -15,6 +13,7 @@
 #include "./graphics/model/Model.h"
 #include "./graphics/renderer/RenderPassManager.h"
 #include "./graphics/texture/TextureLoader.h"
+#include "./graphics/Shader.h"
 
 unsigned int LoadTexture(const char *path);
 void renderScene( Shader &shader);
@@ -33,6 +32,9 @@ using namespace sre;
 
 int main()
 {
+	clock_t start, end;
+
+	start = clock();
 	// Init
 	InputManager::Instance();
 	if (!WindowManager::Instance()->Init("SRenderEngine", 800, 600))
@@ -72,7 +74,7 @@ int main()
 		WindowManager::Instance()->Bind();
 		renderPassManager.Render();
 		
-
+		//renderPassManager.SaverRenderFrame("./test.png");
 		// swap buffers and poll IO events
 		// -------------------------------
 		WindowManager::Instance()->Update();
