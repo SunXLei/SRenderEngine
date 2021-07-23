@@ -103,7 +103,7 @@ namespace sre
 		glStencilFunc(GL_EQUAL, 1, 0xFF);
 		glStencilMask(0x00);
 
-		// draw
+		// draw objects
 		modelRenderer->NDC_Plane.Draw();
 
 		// debug display
@@ -119,6 +119,13 @@ namespace sre
 		// disable stencil test and reset depth test 
 		glDisable(GL_STENCIL_TEST);
 		glEnable(GL_DEPTH_TEST);
+
+
+		// draw skybox
+		// 好像直接在这里draw天空盒就行了，因为depth buffer从 几何阶段拷贝过来了
+		Skybox* skybox = mScene->GetSkybox();
+		skybox->Render(camera);
+
 
 		return {mLightingFBO};
 	}

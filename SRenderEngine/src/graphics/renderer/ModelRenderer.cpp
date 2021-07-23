@@ -56,7 +56,7 @@ namespace sre
 			//std::cout << "here\n";
 			Model *current = mRenderQueue.front();
 
-			// We setup model matrix here, materials in model's draw and light parameters in renderpass.
+			// We setup model matrix here, setup materials in model's draw and setup light parameters in renderpass.
 			SetupModelMatrix(current, shader, isUseMaterial);
 			current->Draw(shader, isUseMaterial);
 
@@ -68,7 +68,8 @@ namespace sre
 	{
 		glm::mat4 modelMatrix(1.0f);
 		glm::mat4 translate = glm::translate(glm::mat4(1.0f), model->GetPosition());
-		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), model->GetRotation(), model->GetRotateAxis());
+
+		glm::mat4 rotate = glm::rotate(glm::mat4(1.0f), glm::radians(model->GetRotation()), model->GetRotateAxis());
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), model->GetScale());
 		glm::mat4 centerTranslate = glm::translate(glm::mat4(1.0f), (-model->GetCenter()));
 

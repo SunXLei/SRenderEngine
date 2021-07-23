@@ -1,9 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 #include "./Texture.h"
+#include "./Cubemap.h"
 
 namespace sre
 {
@@ -14,7 +16,7 @@ namespace sre
 
 		// TODO: HDR loading
 		static Texture* Load2DTexture(const std::string &path, TextureSettings *settings = nullptr);
-		//static Cubemap* loadCubemapTexture(const std::string &right, const std::string &left, const std::string &top, const std::string &bottom, const std::string &back, const std::string &front, CubemapSettings *settings = nullptr);
+		static Cubemap* LoadCubemapTexture(const std::vector<std::string> &paths, CubemapSettings *settings = nullptr);
 
 		static void DestroyCachedTexture();
 

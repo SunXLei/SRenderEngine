@@ -8,7 +8,7 @@
 
 Shader::Shader(const std::unordered_map<std::string, std::string>& shaderPaths)
 {
-	std::unordered_map<GLenum, std::string> shaderSources;
+	std::vector<ShaderSourceInfo> shaderSources;
 	std::string vertexCode;
 	std::string fragmentCode;
 	std::ifstream vertexFile;
@@ -31,11 +31,75 @@ Shader::Shader(const std::unordered_map<std::string, std::string>& shaderPaths)
 		std::string shaderCode = shaderStream.str();
 
 		// store the shader code
-		shaderSources.insert(make_pair(shaderType, shaderCode));
+		shaderSources.push_back({ shaderType,path, shaderCode });
 	}
 
 	CompileShaderSource(shaderSources);
 }
+
+// TODO: give more info in checkerror, need to create a new structure here maybe.
+void Shader::CompileShaderSource(const std::vector<ShaderSourceInfo>& shaderSources)
+{
+	mShaderID = glCreateProgram();
+
+	// compile each shader
+	for (auto& item : shaderSources)
+	{
+		GLenum type = item.shaderType;
+		const std::string& source = item.shaderSource;
+		const std::string& path = item.shaderPath;
+
+
+		unsigned int shader = glCreateShader(type);
+		const char* shaderSource = source.c_str();
+		glShaderSource(shader, 1, &shaderSource, NULL);
+		glCompileShader(shader);
+
+		// TODO:Change GL_ENUM type to string for error message
+		//std::cout << shaderSource << ": \n";
+		CheckCompileErrors(shader, "COMPILE", path);
+
+		glAttachShader(mShaderID, shader);
+		glDeleteShader(shader);
+	}
+
+	// link shader
+	glLinkProgram(mShaderID);
+	CheckCompileErrors(mShaderID, "LINK", "");
+}
+
+void Shader::CheckCompileErrors(GLuint shader, std::string type, std::string path)
+{
+	GLint success;
+	GLchar infoLog[1024];
+	if (type != "LINK")
+	{
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+		if (!success)
+		{
+			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "Fail TO COMPILE" << path << "\n";
+			std::cout << "ERROR::SHADER_COMPILATION_ERROR: "<< "\n" << infoLog
+				<< "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+
+	}
+	else if (type == "LINK")
+	{
+		glGetProgramiv(shader, GL_LINK_STATUS, &success);
+		if (!success)
+		{
+			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+			std::cout << "ERROR::SHADER_LINKING_ERROR: \n" << infoLog
+				<< "\n -- --------------------------------------------------- -- " << std::endl;
+		}
+	}
+
+}
+
+
+
+
 
 Shader::~Shader()
 {
@@ -162,59 +226,4 @@ GLenum Shader::ShaderTypeFromString(const std::string & type)
 	return 0;
 }
 
-void Shader::CompileShaderSource(const std::unordered_map<GLenum, std::string>& shaderSources)
-{
-	mShaderID = glCreateProgram();
-
-	// compile each shader
-	for (auto &item : shaderSources) 
-	{
-		GLenum type = item.first;
-		const std::string &source = item.second;
-
-		unsigned int shader = glCreateShader(type);
-		const char *shaderSource = source.c_str();
-		glShaderSource(shader, 1, &shaderSource, NULL);
-		glCompileShader(shader);
-
-		// TODO:Change GL_ENUM type to string for error message
-		//std::cout << shaderSource << ": \n";
-		CheckCompileErrors(shader, "COMPILE");
-
-		glAttachShader(mShaderID, shader);
-		glDeleteShader(shader);
-	}
-
-	// link shader
-	glLinkProgram(mShaderID);
-	CheckCompileErrors(mShaderID, "LINK");
-}
-
-void Shader::CheckCompileErrors(GLuint shader, std::string type)
-{
-	GLint success;
-	GLchar infoLog[1024];
-	if (type != "LINK")
-	{
-		glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-		if (!success)
-		{
-			glGetShaderInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_COMPILATION_ERROR OF TYPE: " << type << "\n" << infoLog
-				<< "\n -- --------------------------------------------------- -- " << std::endl;
-		}
-		
-	}
-	else if (type == "LINK")
-	{
-		glGetProgramiv(shader, GL_LINK_STATUS, &success);
-		if (!success)
-		{
-			glGetProgramInfoLog(shader, 1024, NULL, infoLog);
-			std::cout << "ERROR::SHADER_LINKING_ERROR: \n" << infoLog
-				<< "\n -- --------------------------------------------------- -- " << std::endl;
-		}
-	}
-
-}
 

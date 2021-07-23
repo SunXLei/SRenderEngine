@@ -51,7 +51,7 @@ namespace sre
 		glm::vec3 mCenter = glm::vec3(0.0f,0.0f,0.0f);		// center is from the original model data
 		glm::vec3 mPosition = glm::vec3(0.0f, 0.0f, 0.0f);	// position is what we want to set
 		glm::vec3 mScale = glm::vec3(1.0f, 1.0f, 1.0f); ;
-		float mRotation = 0.0f;	 glm::vec3 mRotateAxis = glm::vec3(0.0f, 1.0f, 0.0f);
+		float mRotation = 0.0f;	 glm::vec3 mRotateAxis = glm::vec3(0.0f, 0.0f, 1.0f);
 
 	};
 }

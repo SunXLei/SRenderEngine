@@ -64,6 +64,8 @@ namespace sre
 			texture = new Texture(*settings);
 		else 
 			texture = new Texture();
+
+		texture->GetTextureSettings().ChannelNum = numComponents;
 		texture->Generate2DTexture(width, height, dataFormat, GL_UNSIGNED_BYTE, data);
 
 		mTextureCache.insert(std::pair<std::string, Texture*>(path, texture));
@@ -71,6 +73,45 @@ namespace sre
 
 		std::cout  << path << " load successfully!\n";
 		return mTextureCache[path];
+	}
+
+	Cubemap* TextureLoader::LoadCubemapTexture(const std::vector<std::string>& paths, CubemapSettings* settings)
+	{
+		// use the specified of default settings to initialize texture
+		Cubemap* cubemap = nullptr;
+		if (settings != nullptr)
+			cubemap = new Cubemap(*settings);
+		else
+			cubemap = new Cubemap();
+
+		int width, height, numComponents;
+		for (int i = 0; i < paths.size(); i++)
+		{
+			unsigned char* data = stbi_load(paths[i].c_str(), &width, &height, &numComponents, 0);
+
+			if (data) 
+			{
+				GLenum dataFormat;
+				switch (numComponents) 
+				{
+				case 1: dataFormat = GL_RED;  break;
+				case 3: dataFormat = GL_RGB;  break;
+				case 4: dataFormat = GL_RGBA; break;
+				}
+
+				std::cout << paths[i] << " load successfully!\n";
+				cubemap->GenerateCubemapFace(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+				stbi_image_free(data);
+			}
+			else 
+			{
+				std::cout << "TEXTURE LOAD FAIL - path:" << paths[i] << "\n";
+				stbi_image_free(data);
+				return nullptr;
+			}
+		}
+
+		return cubemap;
 	}
 
 	void TextureLoader::DestroyCachedTexture()

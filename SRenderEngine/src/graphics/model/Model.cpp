@@ -155,8 +155,10 @@ namespace sre
 			newMesh.mMaterial.SetAmbientOcclusionMap(LoadMaterialTexture(material, aiTextureType_AMBIENT, false));
 			newMesh.mMaterial.SetMetallicMap(LoadMaterialTexture(material, aiTextureType_SPECULAR, false));
 			newMesh.mMaterial.SetRoughnessMap(LoadMaterialTexture(material, aiTextureType_SHININESS, false));
-			//newMesh.mMaterial.SetAmbientOcclusionMap(LoadMaterialTexture(material, aiTextureType_AMBIENT, false));
+			newMesh.mMaterial.SetMixtureMap(LoadMaterialTexture(material, aiTextureType_UNKNOWN, false));
 
+			if (material->GetTextureCount(aiTextureType_UNKNOWN) > 0)
+				newMesh.mMaterial.SeperateMixture(); // try to seperate mixture for gltf file only;
 		}
 
 		return newMesh;
@@ -166,15 +168,26 @@ namespace sre
 	Texture * Model::LoadMaterialTexture(aiMaterial * mat, aiTextureType type, bool isSRGB)
 	{
 		// Log material constraints are being violated (1 texture per type for the standard shader)
-		if (mat->GetTextureCount(type) > 1)
-			std::cout<< "Mesh's default material contains more than 1 texture for the same type, which currently isn't supported by the standard shader\n";
+		if (mat->GetTextureCount(type) > 2)
+		{
+			// There is some strange phenomenon with gltf file, the same diffuse path will read two times,
+			// so I set the threshold to 2 here.
+			std::cout << "Mesh's default material contains more than 1 texture for the same type, which currently isn't supported by the standard shader\n";
+			
+			//std::cout << "Texture number:" << mat->GetTextureCount(type) << "\n";
+			//aiString str;
+			//mat->GetTexture(type, 0, &str);
+			//std::cout << str.C_Str() << "\n";
+			//aiString str2;
+			//mat->GetTexture(type,1, &str2);
+			//std::cout << str2.C_Str() << "\n";
+		}
 
 		// Load the texture of a certain type, assuming there is one
 		if (mat->GetTextureCount(type) > 0) 
 		{
 			aiString str;
 			mat->GetTexture(type, 0, &str);
-
 
 			// Assumption made: material stuff is located in the same directory as the model object
 			// and the texture str is relative path, so we can concatenate with mDirectory

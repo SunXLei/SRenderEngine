@@ -4,6 +4,7 @@
 
 #include "./Camera.h"
 #include "./model/Model.h"
+#include "./graphics/Skybox.h"
 #include "./renderer/ModelRenderer.h"
 #include "./graphics/light/LightManager.h"
 
@@ -23,6 +24,7 @@ namespace sre
 		void AddModelsToRender();
 
 		inline Camera* GetCamera() { return mCamera; }
+		inline Skybox* GetSkybox() { return mSkybox; }
 		inline ModelRenderer* GetModelRenderer() { return mModelRenderer; }
 		inline LightManager* GetLightManager() { return mLightManager; }
 
@@ -35,6 +37,8 @@ namespace sre
 		Camera* mCamera;
 		ModelRenderer* mModelRenderer;
 		LightManager* mLightManager;
+		Skybox* mSkybox;
+
 
 		//TODO: remember to free pointer
 		std::vector<Model*> mModels;

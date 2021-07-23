@@ -9,16 +9,18 @@ namespace sre
 	{
 	public:
 		Material(Texture *albedoMap = nullptr, Texture *normalMap = nullptr, Texture *metallicMap = nullptr, Texture *roughnessMap = nullptr,
-			Texture *ambientOcclusionMap = nullptr);
+			Texture *ambientOcclusionMap = nullptr, Texture* mixtureMap = nullptr);
 		~Material();
 
+		void SeperateMixture();
 		void BindMaterial(Shader *shader) const;
 
 		inline void SetAlbedoMap(Texture *texture) { mAlbedoMap = texture; }
 		inline void SetNormalMap(Texture *texture) { mNormalMap = texture; }
 		inline void SetMetallicMap(Texture *texture) { mMetallicMap = texture; }
 		inline void SetRoughnessMap(Texture *texture) { mRoughnessMap = texture; }
-		inline void SetAmbientOcclusionMap(Texture *texture) { mAOMap = texture; }
+		inline void SetAmbientOcclusionMap(Texture* texture) { mAOMap = texture; }
+		inline void SetMixtureMap(Texture* texture) { mMixtureMap = texture; }
 
 		//inline void ResetAlbedoMap(Texture* texture) { mAlbedoMap = texture; }
 		//inline void ResetNormalMap(Texture* texture) { mNormalMap = texture; }
@@ -33,7 +35,8 @@ namespace sre
 		Texture *mNormalMap;
 		Texture *mMetallicMap;
 		Texture *mRoughnessMap;
-		Texture *mAOMap;
+		Texture* mAOMap;
+		Texture* mMixtureMap; // this is for gltf format model
 
 	};
 }

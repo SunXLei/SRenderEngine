@@ -50,12 +50,13 @@ namespace sre
 		// Setup some lights for the scene
 		DirectionalLight directionalLight1(3.0f, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.3f, 1.0f, 0.35f));
 		AddDirectionalLight(directionalLight1);
+		PointLight pointLight7(20.0f, glm::vec3(1.0f, 1.0f, 1.0f), 100.0f, glm::vec3(0.0, 15.0f, 0.0f));
+		AddPointLight(pointLight7);
+		//SpotLight spotlight1(100.0f, glm::vec3(1.0f, 1.0f, 0.0f), 50.0f, glm::vec3(0.0f, 9.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(20.0f)));
+		//AddSpotLight(spotlight1);
 
-		SpotLight spotlight1(100.0f, glm::vec3(1.0f, 1.0f, 0.0f), 50.0f, glm::vec3(0.0f, 9.0f, 0.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::cos(glm::radians(12.5f)), glm::cos(glm::radians(20.0f)));
-		AddSpotLight(spotlight1);
-
-		SpotLight spotlight2(50.0f, glm::vec3(1.0f, 1.0f, 0.0f), 30.0f, glm::vec3(7.0, 7.0f, -50.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::cos(glm::radians(10.5f)), glm::cos(glm::radians(30.0f)));
-		AddSpotLight(spotlight2);
+		//SpotLight spotlight2(50.0f, glm::vec3(1.0f, 1.0f, 0.0f), 30.0f, glm::vec3(7.0, 7.0f, -50.0f), glm::vec3(0.0f, -1.0f, 0.0f), glm::cos(glm::radians(10.5f)), glm::cos(glm::radians(30.0f)));
+		//AddSpotLight(spotlight2);
 
 		PointLight pointLight1(10.0f, glm::vec3(1.0f, 0.0f, 1.0f), 30.0f, glm::vec3(5, 5.0f, 0.0f));
 		AddPointLight(pointLight1);

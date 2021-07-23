@@ -54,7 +54,7 @@ namespace sre
 		DisplayTexture(300, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(2), 4, 12);
 		DisplayTexture(450, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 1, 13);
 		DisplayTexture(600, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 2, 14);
-		//DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
+		DisplayTexture(750, 0, 150, 150, gInput.outputGBuffer->GetRenderTarget(3), 3, 15);
 		//DisplayTexture(900, 0, 150, 150, gInput.outputGBuffer->GetDepthStencilTexture(), 1, 16);
 
 		glEnable(GL_DEPTH_TEST);

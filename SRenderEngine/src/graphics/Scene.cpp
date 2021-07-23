@@ -22,6 +22,7 @@ namespace sre
 		delete mCamera;
 		delete mModelRenderer;
 		delete mLightManager;
+		delete mSkybox;
 	}
 
 	void Scene::Update(float deltaTime)
@@ -40,23 +41,38 @@ namespace sre
 	void Scene::Init(int sceneID)
 	{
 		// TODO: initialize model to mModels according to sceneID
-
 		Model *cube1 = new Model(Cube());
 		Model *cube2 = new Model(Cube());
 		Model* cube3 = new Model(Cube());
 		Model* sphere1 = new Model(Sphere());
 		Model* gun = new Model("res/cerberus/meshes/cerberus.obj");
 		Model* sponza = new Model("res/sponza/sponza.obj");
+		Model* gameboy = new Model("res/gameboy/scene.gltf");
+		Model* vikingsword = new Model("res/vikingsword/scene.gltf");
+		Model* chess = new Model("res/Chess/scene.gltf");
+
+
+		mModels.push_back(gameboy);
+		//mModels.push_back(chess);
+		mModels.push_back(vikingsword);
 		mModels.push_back(sphere1);
 		mModels.push_back(cube1);
 		mModels.push_back(cube2);
 		mModels.push_back(cube3);
 		mModels.push_back(gun);
 		mModels.push_back(sponza);
+
+
 		//Model* sphere1 = new Model(Sphere());
 		//Model* sphere2 = new Model(Sphere());
 		//mModels.push_back(sphere1);
 		//mModels.push_back(sphere2);
+		chess->SetPosition(glm::vec3(5.0, 5.0f, 5.0f));
+		chess->SetScale(glm::vec3(0.035f, 0.035f, 0.035f));
+		vikingsword->SetPosition(glm::vec3(5.0, 5.0f, 0.0f));
+		vikingsword->SetScale(glm::vec3(0.035f, 0.035f, 0.035f));
+		gameboy->SetPosition(glm::vec3(0.0, 5.0f, 0.0f));
+		gameboy->SetScale(glm::vec3(0.015f, 0.015f, 0.015f));
 		sphere1->SetPosition(glm::vec3(0.0, 3.0f, 0.0f));
 		cube1->SetPosition(glm::vec3(7.0, 3.0f, -49.0f));
 		//cube1->SetScale(glm::vec3(2.0f, 2.0f, 2.0f));
@@ -84,6 +100,13 @@ namespace sre
 
 
 
-
+		std::vector<std::string> skyboxFilePaths;
+		skyboxFilePaths.push_back("res/skybox/right.png");
+		skyboxFilePaths.push_back("res/skybox/left.png");
+		skyboxFilePaths.push_back("res/skybox/top.png");
+		skyboxFilePaths.push_back("res/skybox/bottom.png");
+		skyboxFilePaths.push_back("res/skybox/back.png");
+		skyboxFilePaths.push_back("res/skybox/front.png");
+		mSkybox = new Skybox(skyboxFilePaths);
 	}
 }

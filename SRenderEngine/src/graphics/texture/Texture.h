@@ -33,6 +33,8 @@ namespace sre
 		// Record data type for framebuffer resizing
 		GLenum dataFormat = GL_NONE;
 		GLenum dataType = GL_NONE;
+		
+		int ChannelNum = 0;
 	};
 
 	class Texture
@@ -59,7 +61,7 @@ namespace sre
 		inline bool IsGenerated() const { return mTextureId != 0; }
 		inline unsigned int GetWidth() const { return mWidth; }
 		inline unsigned int GetHeight() const { return mHeight; }
-		inline const TextureSettings& GetTextureSettings() const { return mTextureSettings; }
+		inline TextureSettings& GetTextureSettings()  { return mTextureSettings; }
 
 	private:
 		void ApplyTextureSettings();
@@ -67,6 +69,7 @@ namespace sre
 		GLenum mTextureTarget;
 		unsigned int mTextureId;
 		unsigned int mWidth, mHeight;
+		unsigned int channel;
 
 		TextureSettings mTextureSettings;
 	};

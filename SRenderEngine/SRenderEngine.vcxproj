@@ -174,6 +174,8 @@
     <ClCompile Include="src\graphics\renderer\renderpass\common\ShadowmapPass.cpp" />
     <ClCompile Include="src\graphics\Scene.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
+    <ClCompile Include="src\graphics\Skybox.cpp" />
+    <ClCompile Include="src\graphics\texture\Cubemap.cpp" />
     <ClCompile Include="src\graphics\texture\Texture.cpp" />
     <ClCompile Include="src\graphics\texture\TextureLoader.cpp" />
     <ClCompile Include="src\platform\opengl\FrameBuffer.cpp" />
@@ -213,6 +215,8 @@
     <ClInclude Include="src\graphics\renderer\renderpass\common\ShadowmapPass.h" />
     <ClInclude Include="src\graphics\Scene.h" />
     <ClInclude Include="src\graphics\Shader.h" />
+    <ClInclude Include="src\graphics\Skybox.h" />
+    <ClInclude Include="src\graphics\texture\Cubemap.h" />
     <ClInclude Include="src\graphics\texture\Texture.h" />
     <ClInclude Include="src\graphics\texture\TextureLoader.h" />
     <ClInclude Include="src\macros.h" />

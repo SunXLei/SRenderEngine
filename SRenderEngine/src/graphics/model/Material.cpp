@@ -1,19 +1,80 @@
 #include "./Material.h"
 
+#include <iostream>
+
 #include "./graphics/texture/TextureLoader.h"
+#include "./stb_image_write.h"
 
 namespace sre
 {
 
-	Material::Material(Texture * albedoMap, Texture * normalMap, Texture * metallicMap, Texture * roughnessMap, Texture * ambientOcclusionMap):
+	Material::Material(Texture * albedoMap, Texture * normalMap, Texture * metallicMap, Texture * roughnessMap, Texture * ambientOcclusionMap, Texture* mixtureMap):
 		mAlbedoMap(albedoMap), mNormalMap(normalMap),
 		mMetallicMap(metallicMap), mRoughnessMap(roughnessMap),
-		mAOMap(ambientOcclusionMap)
+		mAOMap(ambientOcclusionMap), mMixtureMap(mixtureMap)
 	{
 	}
 
 	Material::~Material()
 	{
+	}
+
+	void Material::SeperateMixture()
+	{
+		if (mMixtureMap != nullptr)
+		{
+			int width = mMixtureMap->GetWidth();
+			int height = mMixtureMap->GetHeight();
+			TextureSettings settings = mMixtureMap->GetTextureSettings();
+			int channel = settings.ChannelNum;
+			unsigned char* mixtureData = new unsigned char[width * height * channel];
+			unsigned char* metalData = new unsigned char[width * height];
+			unsigned char* roughData = new unsigned char[width * height];
+			unsigned char* aoData = new unsigned char[width * height];
+			//std::cout << "Mexture Channel:" << channel << "\n";
+			mMixtureMap->bind(0);
+			glGetTexImage(GL_TEXTURE_2D, 0, settings.dataFormat, GL_UNSIGNED_BYTE, mixtureData);
+			mMixtureMap->unbind();
+
+			//stbi_write_png("test.png", width, height,
+			//	3, mixtureData, width * 3);
+			if (channel == 1)
+			{
+				std::cerr << "WRONG MIXTURE FORMATE: Only one channel mixture\n";
+				return;
+			}
+
+
+			// for gltf r - ao, g - roughness, b - metallic
+			for (int i = 0; i < height; i++)
+			{
+				for (int j = 0; j < width; j++)
+				{
+					int index1 = (i * width + j) * channel;
+					int index2 = (i * width + j);
+					metalData[index2] = mixtureData[index1+2];
+					roughData[index2] = mixtureData[index1 + 1];
+					if (channel > 2)
+						aoData[index2] = mixtureData[index1];
+				}
+			}
+			mMetallicMap = new Texture();
+			mMetallicMap->Generate2DTexture(width, height, GL_RED, GL_UNSIGNED_BYTE, metalData);
+			delete[] metalData;
+			mRoughnessMap = new Texture();
+			mRoughnessMap->Generate2DTexture(width, height, GL_RED, GL_UNSIGNED_BYTE, roughData);
+			delete[] roughData;
+			if (channel > 2)
+			{
+				mAOMap = new Texture();
+				mAOMap->Generate2DTexture(width, height, GL_RED, GL_UNSIGNED_BYTE, aoData);
+				delete[] aoData;
+			}
+		}
+		else
+		{
+			std::cerr << "No mixture map has been set, sperate muxture failed!\n ";
+		}
 	}
 
 	void Material::BindMaterial(Shader * shader) const

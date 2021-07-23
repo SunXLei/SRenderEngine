@@ -6,6 +6,13 @@
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 
+struct ShaderSourceInfo
+{
+	GLenum shaderType;
+	std::string shaderPath;
+	std::string shaderSource;
+};
+
 class Shader
 {
 public:
@@ -39,8 +46,8 @@ public:
 	inline unsigned int getShaderID() { return mShaderID; }
 private:
 	GLenum ShaderTypeFromString(const std::string &type);
-	void CompileShaderSource(const std::unordered_map<GLenum, std::string> &shaderSources);
-	void CheckCompileErrors(GLuint shader, std::string type);
+	void CompileShaderSource(const std::vector<ShaderSourceInfo> &shaderSources);
+	void CheckCompileErrors(GLuint shader, std::string type, std::string path);
 
 
 private:

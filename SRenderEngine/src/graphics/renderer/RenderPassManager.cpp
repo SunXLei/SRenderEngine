@@ -16,7 +16,8 @@ namespace sre
 		mDeferredGeometryPass(scene),mDeferredLightingPass(scene),mSSRPass(scene),
 		mFXAAPass(scene),mPS(scene)
 	{
-
+		// always enable this
+		glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 	}
 
 	RenderPassManager::~RenderPassManager()
@@ -29,7 +30,6 @@ namespace sre
 		// it's a simple test now
 		//ShadowmapPassOutput smOutput = mShadowmapPass.Render();
 		//mFowardLightingPass.Render(smOutput, true);
-
 
 		ShadowmapPassOutput smOutput = mShadowmapPass.Render();
 		GeometryPassOutput gOutput = mDeferredGeometryPass.Render();
@@ -69,8 +69,8 @@ namespace sre
 			}
 		}
 
-		//stbi_write_png(savePath.c_str(), width, height,
-		//	3, flippedData, width * 3);
+		stbi_write_png(savePath.c_str(), width, height,
+			3, flippedData, width * 3);
 
 		free(data);
 	}
