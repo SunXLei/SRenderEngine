@@ -127,7 +127,7 @@ vec3 CalculateDirectionalLightRadiance(vec3 albedo, vec3 normal, float metallic,
 		vec3 specular = numerator / denominator;
 
 		// diffuse
-		vec3 kD = (1.0f - F0) * (1 - metallic);
+		vec3 kD = (vec3(1.0) - F) * (1 - metallic);
 		vec3 diffuse = kD * albedo / PI;
 
 		// take care shadow
