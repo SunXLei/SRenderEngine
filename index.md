@@ -4,6 +4,27 @@ You can use the [editor on GitHub](https://github.com/SunXLei/SRenderEngine/edit
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
+# SRenderEngine
+
+## Introduction
+
+![test](./image/test.png)
+
+SRenderEngine is a render engine written in opengl and c++11. This project is basically for me to learn opengl and graphics technics. It is still in a very early stage.
+
+
+
+## Main Feature
+
+- Forward Rendering
+- Deferred Rendering
+- PBR metallic-roughness workflow
+- Shadow mapping
+- PCF
+- Tonemapping
+- SSR
+- ...
+
 ### Markdown
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
